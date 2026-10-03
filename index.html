@@ -3,48 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#e8eaee">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)">
 <title>Gia Phả Vũ Tộc — Thái Bình</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&text=%E4%BA%94%E6%9E%9D%E8%8A%B3&display=swap" rel="stylesheet">
 <style>
   :root{
-    --blue:#1d4d85;      --blue-bg:#dce9f7;
-    --blue2:#3f6ea3;
-    --green:#236b48;     --green-bg:#dcf0e5;
-    --green2:#4b9270;
-    --grey:#565d6b;
-    --line:#c2c7d0;
-    --ink:#191c22;
-    --ink-soft:#565d6b;
+    /* ════════ BẢNG MÀU — chế độ sáng ════════
+       Nguyên tắc chống mỏi mắt:
+       • Thẻ nền trắng/ngà rất nhạt thay vì phủ xanh đậm cả trang → mắt không phải
+         "lọc" một mảng màu bão hoà liên tục; giới tính đã có avatar + viền trái báo hiệu.
+       • Mực chữ không dùng đen tuyệt đối (giảm loá/halation), vẫn ≥ 7:1 (WCAG AAA) cho chữ đọc.
+       • Chữ phụ nhạt nhất vẫn ≥ 4.5:1 (WCAG AA) — không bắt mắt nheo. */
+    --blue:#2b5a8f;      --blue-bg:#e6eef8;
+    --blue2:#5279a8;
+    --green:#2e6e50;     --green-bg:#e3f1e9;
+    --green2:#5a957a;
+    --grey:#7a818d;
+    --line:#cfd4dc;       /* đường nối cây */
+    --card-line:#e2e5ea;  /* viền thẻ — nhạt hơn đường nối */
+    --ink:#22262e;
+    --ink-soft:#5b616c;
     --paper:#ffffff;
-    --page-bg:#e8eaee;
-    --gold:#a97e28;
-    --gold-bg:#f5e9cc;
-    --gold-ink:#8a6522;   /* vàng đậm cho chữ nhỏ — đạt tương phản AA trên nền trắng */
-    --gold-rule:#cdb27a;  /* vàng nhạt cho đường kẻ hoạ tiết */
-    --ink-body:#2b2f38;   /* mực đọc cho câu dẫn */
-    /* ── Màu chữ: 3 bậc rõ ràng (chính / phụ / chú thích) ── */
-    --ink-name:#16191f;   /* tên người — đậm nhất */
-    --ink-note:#515762;   /* ghi chú — bậc 2 */
-    --ink-meta:#6b7280;   /* Đời · năm · số con — bậc 3 */
-    --ink-quote:#454b57;  /* tiểu sử trích dẫn */
+    --page-bg:#f4f5f7;
+    --card-m:#fbfcfe;     /* thẻ nam: trắng ánh xanh rất nhẹ */
+    --card-f:#fbfdfc;     /* thẻ nữ: trắng ánh lục rất nhẹ */
+    --spouse-bg:#f5f6f8;
+    --av-m-bg:#dfe8f4;    /* avatar: nền nhạt + icon màu, không còn chấm tròn xanh đậm */
+    --av-f-bg:#dcede3;
+    --gold:#b08a3c;
+    --gold-bg:#faf3e2;
+    --gold-ink:#86622a;   /* vàng đậm cho chữ nhỏ — AA trên nền trắng */
+    --gold-rule:#d5bd8a;
+    --pin-ink:#5b4513;
+    --chip-ink-bg:#2a2f38; --chip-ink-fg:#ffffff;   /* nhãn "Đời 1 → Đời 7" */
+    --chip-green-bg:#2e6e50; --chip-green-fg:#ffffff; /* nhãn CHI, Ngành thứ */
+    --dot-sep:#b3b9c3;
+    --tag-bg:rgba(255,255,255,.8);
+    --shadow:0 1px 2px rgba(20,30,50,.04);
+    --ink-body:#363b45;   /* câu dẫn */
+    /* ── Mực chữ 3 bậc ── */
+    --ink-name:#1f2430;   /* tên người */
+    --ink-note:#4a505b;   /* ghi chú — 8:1 trên trắng */
+    --ink-meta:#646b77;   /* Đời · năm · số con — 5.3:1 */
+    --ink-quote:#3f4550;  /* tiểu sử */
 
-    /* ── Thang chữ (theo Apple HIG: Headline 17 / Subhead 15 / Footnote 13 / Caption 12–11)
-          Dùng chung cho web & mobile; mobile chỉ đổi khoảng cách, không đổi tỷ lệ. ── */
-    --fs-name:17px;       /* Lora 600 — Headline */
-    --fs-spouse:15px;     /* Lora 600 — Subhead (vợ/chồng) */
-    --fs-quote:14px;      /* Lora italic — tiểu sử */
-    --fs-note:13px;       /* Be Vietnam Pro 400 — Footnote */
-    --fs-meta:12px;       /* Be Vietnam Pro 500 — Caption 1 */
-    --fs-tag:11px;        /* Be Vietnam Pro 600 — Caption 2 */
-    --lh-name:1.25;
-    --lh-note:1.55;
+    /* ════════ THANG CHỮ ════════
+       Thang "nén": chữ lớn nhất nhỏ lại, chữ nhỏ nhất to lên → chênh lệch giữa tên và
+       ghi chú giảm từ 1.31× còn 1.14×, mắt không phải liên tục đổi tiêu cự.
+       Mốc tham chiếu: Material 3 (Body M 14 · Label 12), Apple HIG (tối thiểu 11pt),
+       chữ đọc ≥ 14px, không chữ nào dưới 12px. */
+    --fs-name:16px;       /* Lora 600 (trước 17) */
+    --fs-spouse:15px;     /* Lora 600 */
+    --fs-quote:14.5px;    /* Lora thường, KHÔNG nghiêng (trước 14 nghiêng) */
+    --fs-note:14px;       /* Be Vietnam Pro 400 (trước 13) */
+    --fs-meta:12.5px;     /* Be Vietnam Pro (trước 12) */
+    --fs-tag:12px;        /* (trước 11) */
+    --lh-name:1.3;
+    --lh-note:1.6;
 
-    --av:32px;
-    --top-h:42px;
-    --card-gap:26px;  /* khoảng chừa bên trái thẻ cho nút ▸ — đường nối chạy tới sát thẻ */   /* chiều cao vùng tên + dòng phụ — dùng để canh nút mở/đóng & đường nối */
+    --av:30px;
+    --top-h:42px;    /* chiều cao vùng tên + dòng phụ — canh nút mở/đóng & đường nối */
+    --card-gap:26px; /* khoảng chừa trái thẻ cho nút ▸ */
+  }
+
+  /* ════════ CHẾ ĐỘ TỐI — tự bật theo cài đặt máy (đọc ban đêm trên điện thoại) ════════
+     Nền xám than (không đen tuyệt đối), chữ trắng ngà (không trắng tinh) để tránh chói;
+     màu nhấn giảm độ bão hoà, sáng hơn để đủ tương phản trên nền tối. */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --blue:#86aedc;   --blue-bg:#23303f;
+      --blue2:#7097c4;
+      --green:#7bbd9b;  --green-bg:#21302a;
+      --green2:#66a487;
+      --grey:#8c939e;
+      --line:#3b414b;
+      --card-line:#2d323b;
+      --ink:#e4e6ea;
+      --ink-soft:#a2a8b2;
+      --paper:#1c2027;
+      --page-bg:#14171c;
+      --card-m:#1c2027;
+      --card-f:#1c2027;
+      --spouse-bg:#171a20;
+      --av-m-bg:#263446;
+      --av-f-bg:#22352c;
+      --gold:#c7a45a;
+      --gold-bg:#2b2517;
+      --gold-ink:#d6b876;
+      --gold-rule:#6f5d33;
+      --pin-ink:#e6d3a6;
+      --chip-ink-bg:#e4e6ea; --chip-ink-fg:#14171c;
+      --chip-green-bg:#2f5c47; --chip-green-fg:#eaf4ee;
+      --dot-sep:#5a606b;
+      --tag-bg:rgba(255,255,255,.06);
+      --shadow:none;
+      --ink-body:#c9cdd4;
+      --ink-name:#e8eaee;
+      --ink-note:#b6bcc6;
+      --ink-meta:#959ca8;
+      --ink-quote:#c3c8d0;
+    }
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
@@ -61,19 +123,19 @@
   header{
     text-align:center;
     padding:64px 24px 44px;
-    background:linear-gradient(180deg,#ffffff,var(--page-bg));
+    background:linear-gradient(180deg,var(--paper),var(--page-bg));
     border-bottom:1px solid var(--line);
   }
-  .eyebrow{letter-spacing:4.5px;font-size:11.5px;color:var(--gold-ink);font-weight:600;text-transform:uppercase;}
-  h1{font-size:34px;font-weight:700;color:var(--ink);margin:14px 0 18px;letter-spacing:0.8px;text-wrap:balance;}
-  header .sub{font-size:14px;color:var(--ink-soft);max-width:620px;margin:0 auto;line-height:1.85;text-wrap:pretty;}
+  .eyebrow{letter-spacing:4px;font-size:12px;color:var(--gold-ink);font-weight:600;text-transform:uppercase;}
+  h1{font-size:30px;font-weight:600;color:var(--ink);margin:14px 0 18px;letter-spacing:0.6px;text-wrap:balance;}
+  header .sub{font-size:15px;color:var(--ink-soft);max-width:600px;margin:0 auto;line-height:1.7;text-wrap:pretty;}
   /* ===== Câu dẫn "Ngũ Chi Phương" ===== */
   .quote-card{
     max-width:620px;margin:34px auto 0;
     padding:28px 44px 26px;
     background:var(--paper);
-    border:1px solid #dde0e6;border-radius:14px;
-    box-shadow:0 1px 2px rgba(20,30,50,0.03),0 10px 28px -16px rgba(20,30,50,0.14);
+    border:1px solid var(--card-line);border-radius:14px;
+    box-shadow:var(--shadow);
   }
   .q-orn{display:flex;align-items:center;justify-content:center;gap:18px;margin:0 auto 18px;}
   .q-orn i{display:block;width:64px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-rule));}
@@ -81,12 +143,12 @@
   .q-han{
     display:inline-flex;gap:14px;
     font-family:'Noto Serif TC','Songti TC','PMingLiU',serif;font-weight:500;
-    font-size:24px;line-height:1;color:var(--gold-ink);
+    font-size:22px;line-height:1;color:var(--gold-ink);
   }
   .q-text{
     margin:0 auto;max-width:500px;
     font-family:'Lora',serif;font-style:italic;font-weight:400;
-    font-size:16px;line-height:1.7;color:var(--ink-body);
+    font-size:15.5px;line-height:1.7;color:var(--ink-body);
     text-wrap:balance;
   }
   .q-term{font-weight:600;color:var(--ink);}
@@ -97,16 +159,16 @@
     .quote-card{padding:22px 20px 20px;margin-top:28px;}
     .q-orn{gap:12px;margin-bottom:14px;}
     .q-orn i{width:36px;}
-    .q-han{font-size:21px;gap:10px;}
+    .q-han{font-size:20px;gap:10px;}
     .q-text{font-size:15px;}
   }
   header .fromduong{
-    font-size:11.5px;color:var(--ink-soft);margin-top:14px;
+    font-size:12px;color:var(--ink-soft);margin-top:14px;
     letter-spacing:0.3px;
   }
   header .fromduong b{color:var(--ink);font-weight:600;}
 
-  .legend{display:flex;justify-content:center;gap:20px;margin-top:28px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);}
+  .legend{display:flex;justify-content:center;gap:20px;margin-top:28px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);}
   .legend span{display:inline-flex;align-items:center;gap:7px;}
   .dot{width:11px;height:11px;border-radius:50%;display:inline-block;}
   .dot-male{background:var(--blue);}
@@ -116,21 +178,21 @@
 
   .chi-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:20px;}
   .chi-nav button{
-    text-decoration:none;font-size:12px;font-weight:600;color:var(--blue);
+    text-decoration:none;font-size:13px;font-weight:600;color:var(--blue);
     background:var(--paper);border:1px solid var(--line);padding:6px 16px;border-radius:999px;
     cursor:pointer;font-family:inherit;
   }
   .chi-nav button:hover{background:var(--blue-bg);}
-  .hint{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:16px;}
+  .hint{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:16px;}
 
   /* ===== person card ===== */
   .card-body{
     background:var(--paper);
-    border:1px solid var(--line);
+    border:1px solid var(--card-line);
     border-radius:10px;
     padding:12px 16px 13px;
     margin-left:var(--card-gap);
-    box-shadow:0 1px 2px rgba(20,30,50,0.05);
+    box-shadow:var(--shadow);
   }
   /* Dòng 1: tên. Dòng 2: Đời · năm · số con — chữ thường, ngăn bằng dấu chấm giữa (không dùng pill
      để dòng phụ không tranh chỗ với tên). */
@@ -148,7 +210,7 @@
     font-variant-numeric:tabular-nums;
   }
   .meta > span:not(.adopt-tag) + span::before{
-    content:'·';display:inline-block;margin:0 7px;color:#a3a9b4;font-weight:700;
+    content:'·';display:inline-block;margin:0 7px;color:var(--dot-sep);font-weight:700;
   }
   .gen-tag{font-weight:600;color:var(--ink-note);white-space:nowrap;}
   .years{font-weight:500;white-space:nowrap;letter-spacing:.1px;}
@@ -156,18 +218,18 @@
   .avatar{
     width:var(--av);height:var(--av);border-radius:50%;flex:none;
     display:flex;align-items:center;justify-content:center;
-    color:#fff;line-height:0;box-sizing:border-box;overflow:hidden;
+    line-height:0;box-sizing:border-box;overflow:hidden;
   }
   /* icon SVG chiếm 60% đường kính, luôn đúng tâm ở mọi trình duyệt/thiết bị */
   .avatar .sex-ico{display:block;width:60%;height:60%;flex:none;}
   .avatar.sp .sex-ico{width:66%;height:66%;stroke-width:2.4;}
-  .card-body.male .avatar{background:var(--blue);}
-  .card-body.female .avatar{background:var(--green);}
-  .avatar.sp{background:var(--paper) !important;border:1.5px solid var(--line);}
+  .card-body.male .avatar{background:var(--av-m-bg);color:var(--blue);}
+  .card-body.female .avatar{background:var(--av-f-bg);color:var(--green);}
+  .avatar.sp{background:transparent !important;border:1.5px solid var(--line);}
   .spouse-card.male .avatar.sp{border-color:var(--blue);color:var(--blue);}
   .spouse-card.female .avatar.sp{border-color:var(--green);color:var(--green);}
-  .card-body.male{background:var(--blue-bg);}
-  .card-body.female{background:var(--green-bg);}
+  .card-body.male{background:var(--card-m);}
+  .card-body.female{background:var(--card-f);}
   .name{
     font-family:'Lora',serif;font-weight:600;font-size:var(--fs-name);line-height:var(--lh-name);
     color:var(--ink-name);letter-spacing:0;
@@ -180,27 +242,28 @@
   }
   .note + .note{margin-top:4px;}
   .note strong{font-weight:600;color:var(--ink-name);}
+  .note{max-width:68ch;}  /* độ dài dòng ≤ ~75 ký tự */
 
-  .card-body.c-blue{border-left:4px solid var(--blue);}
-  .card-body.c-green{border-left:4px solid var(--green);}
-  .card-body.c-grey{border-left:4px solid var(--grey);}
-  .card-body.c-blue2{border-left:4px solid var(--blue2);}
-  .card-body.c-green2{border-left:4px solid var(--green2);}
+  .card-body.c-blue{border-left:3px solid var(--blue);}
+  .card-body.c-green{border-left:3px solid var(--green);}
+  .card-body.c-grey{border-left:3px solid var(--grey);}
+  .card-body.c-blue2{border-left:3px solid var(--blue2);}
+  .card-body.c-green2{border-left:3px solid var(--green2);}
   .card-body.adopted{border-style:dashed;}
   .adopt-tag{
-    font-size:var(--fs-tag);color:var(--ink-note);background:rgba(255,255,255,.75);
-    border:1px solid var(--line);border-radius:999px;padding:0 7px;margin-left:8px;
+    font-size:var(--fs-tag);color:var(--ink-note);background:var(--tag-bg);
+    border:1px solid var(--card-line);border-radius:999px;padding:0 7px;margin-left:8px;
     font-style:normal;font-weight:600;line-height:1.6;
   }
 
   .spouse-row{
     display:flex;align-items:flex-start;gap:8px;
-    margin:10px 0 0 calc(var(--av) + 12px);padding-top:10px;border-top:1px dashed var(--line);
+    margin:10px 0 0 calc(var(--av) + 12px);padding-top:10px;border-top:1px dashed var(--card-line);
   }
   .knot{color:var(--gold);display:inline-flex;align-items:center;margin-top:4px;flex:none;}
   .spouse-card{
     flex:1;min-width:0;
-    background:var(--page-bg);border:1px solid var(--line);border-radius:8px;
+    background:var(--spouse-bg);border:1px solid var(--card-line);border-radius:8px;
     padding:8px 12px 9px;
   }
   .spouse-card .card-top{--av:24px;--top-h:28px;column-gap:9px;}
@@ -212,8 +275,8 @@
   /* ===== Trunk (Đời 1-7) — simple vertical chain ===== */
   .trunk-wrap{max-width:760px;margin:40px auto 0;padding:0 20px;}
   .trunk-title{
-    display:block;text-align:center;background:var(--ink);color:#fff;
-    font-family:'Lora',serif;font-weight:700;font-size:12.5px;letter-spacing:1.5px;
+    display:block;text-align:center;background:var(--chip-ink-bg);color:var(--chip-ink-fg);
+    font-family:'Lora',serif;font-weight:600;font-size:13px;letter-spacing:1.5px;
     padding:6px 20px;border-radius:999px;margin:0 auto 20px;width:fit-content;
   }
   ul.trunk-list{list-style:none;margin:0;padding:0;}
@@ -242,15 +305,15 @@
   .fork-col + .fork-col{margin-left:16px;}
   .fork-col::before{content:'';position:absolute;top:-10px;left:50%;width:2px;height:10px;background:var(--line);margin-left:-1px;}
   .fork-tag{
-    font-size:10px;font-weight:700;letter-spacing:.2px;color:var(--blue);
+    font-size:12px;font-weight:600;letter-spacing:.2px;color:var(--blue);
     background:var(--blue-bg);border-radius:999px;padding:3px 10px;margin:0 0 8px 24px;display:inline-block;
   }
-  .fork-tag.main{color:#fff;background:var(--green);}
+  .fork-tag.main{color:var(--chip-green-fg);background:var(--chip-green-bg);}
   .fork-col .trunk-content .card-body{margin-left:0;}
   .fork-col > ul.desc-root{margin:0;}
   .card-body .pin{
     margin-top:8px;padding:7px 11px;background:var(--gold-bg);border:1px solid var(--gold);border-radius:7px;
-    font-style:normal;color:#5b4310;
+    font-style:normal;color:var(--pin-ink);
   }
   .chain{margin:0 0 0 30px;}
   .fork-col .desc-children{padding-left:18px;--li-pad:16px;}
@@ -258,8 +321,8 @@
   .chain > .card-body{margin-left:24px;}
   .ncp-title{max-width:760px;margin:46px auto 0;padding:0 20px;}
   .ncp-title .box{border-top:2px solid var(--green);border-bottom:1px solid var(--line);padding:14px 4px;text-align:center;}
-  .ncp-title .eb{display:block;font-size:10.5px;font-weight:700;letter-spacing:2.5px;color:var(--green);text-transform:uppercase;}
-  .ncp-title .tx{display:block;margin-top:6px;font-family:'Lora',serif;font-weight:600;font-size:14.5px;line-height:1.6;color:var(--ink);}
+  .ncp-title .eb{display:block;font-size:12px;font-weight:700;letter-spacing:2.5px;color:var(--green);text-transform:uppercase;}
+  .ncp-title .tx{display:block;margin-top:6px;font-family:'Lora',serif;font-weight:600;font-size:15px;line-height:1.6;color:var(--ink);}
   @media (max-width:640px){
     .fork-cols{flex-direction:column;}
     .fork-col + .fork-col{margin-left:0;margin-top:18px;}
@@ -275,9 +338,9 @@
 
   .chi-label{margin-bottom:16px;}
   .chi-label span{
-    display:inline-block;background:var(--green);color:#fff;
-    font-family:'Lora',serif;font-weight:700;font-size:12.5px;letter-spacing:2px;
-    padding:6px 22px;border-radius:999px;box-shadow:0 2px 6px rgba(47,143,95,0.25);
+    display:inline-block;background:var(--chip-green-bg);color:var(--chip-green-fg);
+    font-family:'Lora',serif;font-weight:600;font-size:13px;letter-spacing:2px;
+    padding:6px 22px;border-radius:999px;
   }
 
   ul.desc-root{list-style:none;margin:0;padding:0;}
@@ -304,7 +367,7 @@
     position:absolute;left:0;top:calc(12px + var(--top-h) / 2 - 10px);z-index:2;
     width:20px;height:20px;border-radius:50%;
     background:var(--paper);border:1px solid var(--line);
-    color:var(--ink-soft);font-size:10px;line-height:18px;font-weight:700;
+    color:var(--ink-soft);font-size:11px;line-height:18px;font-weight:700;
     text-align:center;
   }
   details[open] > summary::before{content:'▾';}
@@ -319,27 +382,34 @@
     border-left:3px solid var(--gold);
     border-radius:0 10px 10px 0;
     font-family:'Lora',serif;
-    font-style:italic;
+    font-style:normal;   /* chữ nghiêng đọc đoạn dài rất mỏi — chỉ giữ nghiêng ở câu dẫn ngắn */
     font-weight:400;
     font-size:var(--fs-quote);
-    line-height:1.65;
+    line-height:1.7;
     color:var(--ink-quote);
-    max-width:680px;
+    max-width:640px;
     text-wrap:pretty;
   }
 
-  footer{text-align:center;margin-top:60px;font-size:11px;color:var(--ink-soft);padding:0 20px;white-space:pre-line;line-height:1.6;}
+  footer{text-align:center;margin-top:60px;font-size:12px;color:var(--ink-soft);padding:0 20px;white-space:pre-line;line-height:1.6;}
 
-  /* ===== Mobile (iPhone): thang chữ lớn hơn, thụt lề gọn hơn ===== */
+  /* ===== Mobile (iPhone): cùng thang chữ, thụt lề gọn hơn ===== */
   @media (max-width:640px){
     :root{
       /* cùng thang chữ với desktop — chỉ thu avatar & khoảng cách */
       --av:28px;
-      --top-h:42px;
+      --top-h:41px;
+      /* màn hẹp: dòng ngắn nên khối chữ cao hơn → hạ nửa bậc để bớt "nặng" mà vẫn ≥ 13.5px */
+      --fs-name:15.5px;
+      --fs-spouse:14.5px;
+      --fs-quote:14px;
+      --fs-note:13.5px;
+      --fs-meta:12px;
       --card-gap:22px;
     }
     header{padding:48px 18px 36px;}
-    h1{font-size:28px;}
+    h1{font-size:25px;}
+    header .sub{font-size:14.5px;}
     .chi-block,.trunk-wrap,.ncp-title{padding:0 12px;}
     .card-body{padding:11px 12px 12px;}
     .card-top{column-gap:10px;}
