@@ -14,28 +14,35 @@
   :root{
     /* ════════ BẢNG MÀU — chế độ sáng ════════
        Nguyên tắc chống mỏi mắt:
-       • Thẻ nền trắng/ngà rất nhạt thay vì phủ xanh đậm cả trang → mắt không phải
-         "lọc" một mảng màu bão hoà liên tục; giới tính đã có avatar + viền trái báo hiệu.
+       • Thẻ vẫn phối màu theo giới tính nhưng dùng tông pastel độ bão hoà thấp
+         (độ sáng ~95–96%) — đủ để phân lớp bố cục mà mắt không phải điều tiết.
+       • Các lớp xếp chồng có độ sáng khác nhau rõ: nền trang → thẻ màu → thẻ vợ/chồng
+         sáng hơn → khối tiểu sử ngà ấm, nên nhìn là thấy cấu trúc.
        • Mực chữ không dùng đen tuyệt đối (giảm loá/halation), vẫn ≥ 7:1 (WCAG AAA) cho chữ đọc.
        • Chữ phụ nhạt nhất vẫn ≥ 4.5:1 (WCAG AA) — không bắt mắt nheo. */
-    --blue:#2b5a8f;      --blue-bg:#e6eef8;
+    --blue:#2b5a8f;      --blue-bg:#e4edf7;
     --blue2:#5279a8;
-    --green:#2e6e50;     --green-bg:#e3f1e9;
+    --green:#2e6e50;     --green-bg:#e1f0e7;
     --green2:#5a957a;
     --grey:#7a818d;
     --line:#cfd4dc;       /* đường nối cây */
-    --card-line:#e2e5ea;  /* viền thẻ — nhạt hơn đường nối */
+    --card-line:#dde2e9;  /* viền thẻ — nhạt hơn đường nối */
     --ink:#22262e;
     --ink-soft:#5b616c;
     --paper:#ffffff;
-    --page-bg:#f4f5f7;
-    --card-m:#fbfcfe;     /* thẻ nam: trắng ánh xanh rất nhẹ */
-    --card-f:#fbfdfc;     /* thẻ nữ: trắng ánh lục rất nhẹ */
-    --spouse-bg:#f5f6f8;
-    --av-m-bg:#dfe8f4;    /* avatar: nền nhạt + icon màu, không còn chấm tròn xanh đậm */
-    --av-f-bg:#dcede3;
+    --page-bg:#f2f3f1;    /* xám ấm rất nhạt, không lạnh như xám xanh */
+    --card-m:#eef3f9;     /* thẻ nam: xanh sương */
+    --card-f:#edf5f0;     /* thẻ nữ: lục sương */
+    --card-m-line:#d6e1ee; --card-f-line:#d3e5da;  /* viền thẻ cùng tông */
+    --spouse-bg:#fbfcfd;  /* thẻ vợ/chồng sáng hơn thẻ chính → nổi lớp */
+    --av-m-bg:#d8e5f3;    /* avatar: nền nhạt + icon màu, không còn chấm tròn xanh đậm */
+    --av-f-bg:#d4eadd;
     --gold:#b08a3c;
-    --gold-bg:#faf3e2;
+    --gold-bg:#f8f0dc;
+    --bio-bg:#fbf7ef;     /* tiểu sử: ngà ấm, như trang giấy */
+    --header-top:#e9eef5; /* đầu trang: xanh sương chuyển dần về nền */
+    --quote-bg:#fdfbf6;
+    --chi-bg:rgba(255,255,255,.45); /* dải nền nhẹ cho từng Chi */
     --gold-ink:#86622a;   /* vàng đậm cho chữ nhỏ — AA trên nền trắng */
     --gold-rule:#d5bd8a;
     --pin-ink:#5b4513;
@@ -86,13 +93,18 @@
       --ink-soft:#a2a8b2;
       --paper:#1c2027;
       --page-bg:#14171c;
-      --card-m:#1c2027;
-      --card-f:#1c2027;
+      --card-m:#1d242e;
+      --card-f:#1c2622;
+      --card-m-line:#2c3846; --card-f-line:#2b3a32;
       --spouse-bg:#171a20;
       --av-m-bg:#263446;
       --av-f-bg:#22352c;
       --gold:#c7a45a;
       --gold-bg:#2b2517;
+      --bio-bg:#221f19;
+      --header-top:#1a2029;
+      --quote-bg:#1e1f22;
+      --chi-bg:rgba(255,255,255,.02);
       --gold-ink:#d6b876;
       --gold-rule:#6f5d33;
       --pin-ink:#e6d3a6;
@@ -123,7 +135,7 @@
   header{
     text-align:center;
     padding:64px 24px 44px;
-    background:linear-gradient(180deg,var(--paper),var(--page-bg));
+    background:linear-gradient(180deg,var(--header-top),var(--page-bg));
     border-bottom:1px solid var(--line);
   }
   .eyebrow{letter-spacing:4px;font-size:12px;color:var(--gold-ink);font-weight:600;text-transform:uppercase;}
@@ -133,7 +145,7 @@
   .quote-card{
     max-width:620px;margin:34px auto 0;
     padding:28px 44px 26px;
-    background:var(--paper);
+    background:var(--quote-bg);
     border:1px solid var(--card-line);border-radius:14px;
     box-shadow:var(--shadow);
   }
@@ -228,8 +240,8 @@
   .avatar.sp{background:transparent !important;border:1.5px solid var(--line);}
   .spouse-card.male .avatar.sp{border-color:var(--blue);color:var(--blue);}
   .spouse-card.female .avatar.sp{border-color:var(--green);color:var(--green);}
-  .card-body.male{background:var(--card-m);}
-  .card-body.female{background:var(--card-f);}
+  .card-body.male{background:var(--card-m);border-color:var(--card-m-line);}
+  .card-body.female{background:var(--card-f);border-color:var(--card-f-line);}
   .name{
     font-family:'Lora',serif;font-weight:600;font-size:var(--fs-name);line-height:var(--lh-name);
     color:var(--ink-name);letter-spacing:0;
@@ -335,6 +347,9 @@
 
   /* ===== Chi sections — descendancy (indented) tree ===== */
   .chi-block{max-width:760px;margin:50px auto 0;padding:0 20px;scroll-margin-top:24px;}
+  /* mỗi Chi một dải nền mờ, bo góc — tách các Chi thành khối rõ ràng */
+  .chi-block{background:var(--chi-bg);border-radius:16px;padding-top:18px;padding-bottom:20px;}
+  .trunk-wrap{background:var(--chi-bg);border-radius:16px;padding-top:18px;padding-bottom:12px;}
 
   .chi-label{margin-bottom:16px;}
   .chi-label span{
@@ -378,7 +393,7 @@
   blockquote.bio{
     margin:8px 0 10px var(--card-gap);
     padding:12px 18px 13px;
-    background:var(--paper);
+    background:var(--bio-bg);
     border-left:3px solid var(--gold);
     border-radius:0 10px 10px 0;
     font-family:'Lora',serif;
@@ -410,7 +425,8 @@
     header{padding:48px 18px 36px;}
     h1{font-size:25px;}
     header .sub{font-size:14.5px;}
-    .chi-block,.trunk-wrap,.ncp-title{padding:0 12px;}
+    .chi-block,.trunk-wrap,.ncp-title{padding-left:10px;padding-right:10px;}
+    .chi-block,.trunk-wrap{margin-left:6px;margin-right:6px;}
     .card-body{padding:11px 12px 12px;}
     .card-top{column-gap:10px;}
     /* màn hẹp: ghi chú & vợ/chồng dùng trọn bề ngang thẻ để không bị bóp ở các đời sâu */
