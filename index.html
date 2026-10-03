@@ -25,14 +25,25 @@
     --gold-ink:#8a6522;   /* vàng đậm cho chữ nhỏ — đạt tương phản AA trên nền trắng */
     --gold-rule:#cdb27a;  /* vàng nhạt cho đường kẻ hoạ tiết */
     --ink-body:#2b2f38;   /* mực đọc cho câu dẫn */
-    --ink-note:#515762;   /* mực ghi chú trong thẻ — nhạt hơn bản trước 10% (pha 10% trắng) */
-    /* thang chữ cho thẻ người (desktop) — mobile ghi đè ở cuối file */
-    --fs-name:15px;
-    --fs-note:12px;
-    --fs-meta:11.5px;
-    --fs-tag:10.5px;
+    /* ── Màu chữ: 3 bậc rõ ràng (chính / phụ / chú thích) ── */
+    --ink-name:#16191f;   /* tên người — đậm nhất */
+    --ink-note:#515762;   /* ghi chú — bậc 2 */
+    --ink-meta:#6b7280;   /* Đời · năm · số con — bậc 3 */
+    --ink-quote:#454b57;  /* tiểu sử trích dẫn */
+
+    /* ── Thang chữ (theo Apple HIG: Headline 17 / Subhead 15 / Footnote 13 / Caption 12–11)
+          Dùng chung cho web & mobile; mobile chỉ đổi khoảng cách, không đổi tỷ lệ. ── */
+    --fs-name:17px;       /* Lora 600 — Headline */
+    --fs-spouse:15px;     /* Lora 600 — Subhead (vợ/chồng) */
+    --fs-quote:14px;      /* Lora italic — tiểu sử */
+    --fs-note:13px;       /* Be Vietnam Pro 400 — Footnote */
+    --fs-meta:12px;       /* Be Vietnam Pro 500 — Caption 1 */
+    --fs-tag:11px;        /* Be Vietnam Pro 600 — Caption 2 */
+    --lh-name:1.25;
+    --lh-note:1.55;
+
     --av:32px;
-    --top-h:43px;
+    --top-h:42px;
     --card-gap:26px;  /* khoảng chừa bên trái thẻ cho nút ▸ — đường nối chạy tới sát thẻ */   /* chiều cao vùng tên + dòng phụ — dùng để canh nút mở/đóng & đường nối */
   }
   *{box-sizing:border-box;}
@@ -117,58 +128,56 @@
     background:var(--paper);
     border:1px solid var(--line);
     border-radius:10px;
-    padding:11px 14px 12px;
+    padding:12px 16px 13px;
     margin-left:var(--card-gap);
-    box-shadow:0 1px 3px rgba(20,30,50,0.06);
+    box-shadow:0 1px 2px rgba(20,30,50,0.05);
   }
-  /* tên chiếm trọn dòng 1, thông tin phụ xuống dòng 2 — tên không bị đẩy xuống dòng */
+  /* Dòng 1: tên. Dòng 2: Đời · năm · số con — chữ thường, ngăn bằng dấu chấm giữa (không dùng pill
+     để dòng phụ không tranh chỗ với tên). */
   .card-top{
     display:grid;grid-template-columns:var(--av) minmax(0,1fr);
-    column-gap:10px;row-gap:3px;align-items:center;min-height:var(--top-h);
+    column-gap:12px;row-gap:2px;align-items:center;min-height:var(--top-h);
   }
   .card-top > .avatar{grid-row:1 / span 2;align-self:center;}
   .card-top > .name{grid-column:2;align-self:end;}
   .card-top > .name:last-child{grid-row:1 / span 2;align-self:center;}
   .card-top .meta{
-    grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;
+    grid-column:2;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0;row-gap:2px;
     align-self:start;min-width:0;
+    font-size:var(--fs-meta);line-height:1.5;color:var(--ink-meta);
+    font-variant-numeric:tabular-nums;
   }
-  .gen-tag{
-    font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:var(--fs-tag);
-    color:var(--ink-soft);font-variant-numeric:tabular-nums;letter-spacing:.2px;
-    background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:999px;
-    padding:2px 8px;line-height:1.4;white-space:nowrap;flex:none;
+  .meta > span:not(.adopt-tag) + span::before{
+    content:'·';display:inline-block;margin:0 7px;color:#a3a9b4;font-weight:700;
   }
+  .gen-tag{font-weight:600;color:var(--ink-note);white-space:nowrap;}
+  .years{font-weight:500;white-space:nowrap;letter-spacing:.1px;}
+  .count{font-weight:500;white-space:nowrap;}
   .avatar{
     width:var(--av);height:var(--av);border-radius:50%;flex:none;
     display:flex;align-items:center;justify-content:center;
-    font-size:calc(var(--av) * .48);line-height:1;color:#fff;
+    font-size:calc(var(--av) * .56);line-height:1;color:#fff;
+    font-family:system-ui,-apple-system,'Segoe UI Symbol',sans-serif;font-weight:400;
   }
   .card-body.male .avatar{background:var(--blue);}
   .card-body.female .avatar{background:var(--green);}
-  .avatar.sp{background:var(--paper) !important;border:2px solid var(--line);}
+  .avatar.sp{background:var(--paper) !important;border:1.5px solid var(--line);}
   .spouse-card.male .avatar.sp{border-color:var(--blue);color:var(--blue);}
   .spouse-card.female .avatar.sp{border-color:var(--green);color:var(--green);}
   .card-body.male{background:var(--blue-bg);}
   .card-body.female{background:var(--green-bg);}
   .name{
-    font-family:'Lora',serif;font-weight:600;font-size:var(--fs-name);line-height:1.3;
-    color:var(--ink);letter-spacing:.1px;
+    font-family:'Lora',serif;font-weight:600;font-size:var(--fs-name);line-height:var(--lh-name);
+    color:var(--ink-name);letter-spacing:0;
   }
-  .years{
-    font-size:var(--fs-meta);font-weight:500;color:var(--ink-soft);white-space:nowrap;
-    font-variant-numeric:tabular-nums;letter-spacing:.2px;
-  }
+  /* Ghi chú thẳng hàng với cột tên (không bắt đầu dưới avatar) — như danh sách iOS / Linear */
   .note{
     font-size:var(--fs-note);font-weight:400;font-style:normal;color:var(--ink-note);
-    margin-top:6px;line-height:1.55;text-wrap:pretty;overflow-wrap:break-word;
+    line-height:var(--lh-note);text-wrap:pretty;overflow-wrap:break-word;
+    margin:6px 0 0 calc(var(--av) + 12px);
   }
-  .note strong{font-weight:600;color:var(--ink);}
-  .count{
-    font-size:var(--fs-tag);font-weight:500;color:var(--ink-soft);flex:none;
-    font-variant-numeric:tabular-nums;line-height:1.4;
-    background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:999px;padding:2px 9px;
-  }
+  .note + .note{margin-top:4px;}
+  .note strong{font-weight:600;color:var(--ink-name);}
 
   .card-body.c-blue{border-left:4px solid var(--blue);}
   .card-body.c-green{border-left:4px solid var(--green);}
@@ -177,27 +186,26 @@
   .card-body.c-green2{border-left:4px solid var(--green2);}
   .card-body.adopted{border-style:dashed;}
   .adopt-tag{
-    font-size:var(--fs-tag);color:var(--ink-soft);background:var(--page-bg);
-    border:1px solid var(--line);border-radius:999px;padding:1px 6px;
-    font-style:normal;font-weight:600;
+    font-size:var(--fs-tag);color:var(--ink-note);background:rgba(255,255,255,.75);
+    border:1px solid var(--line);border-radius:999px;padding:0 7px;margin-left:8px;
+    font-style:normal;font-weight:600;line-height:1.6;
   }
 
   .spouse-row{
     display:flex;align-items:flex-start;gap:8px;
-    margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);
+    margin:10px 0 0 calc(var(--av) + 12px);padding-top:10px;border-top:1px dashed var(--line);
   }
   .knot{color:var(--gold);display:inline-flex;align-items:center;margin-top:4px;flex:none;}
   .spouse-card{
     flex:1;min-width:0;
     background:var(--page-bg);border:1px solid var(--line);border-radius:8px;
-    padding:8px 11px;
+    padding:8px 12px 9px;
   }
-  .spouse-card .card-top{--av:26px;--top-h:34px;column-gap:8px;row-gap:1px;}
-  .spouse-card .name{font-size:calc(var(--fs-name) - 1px);}
-  .spouse-card .years{font-size:calc(var(--fs-meta) - .5px);}
-  .spouse-card .note{margin-top:4px;}
+  .spouse-card .card-top{--av:24px;--top-h:28px;column-gap:9px;}
+  .spouse-card .name{font-size:var(--fs-spouse);}
+  .spouse-card .note{margin:5px 0 0 0;}
   /* tên khuyết: "(chưa rõ tên)" — nhạt, nghiêng, nhẹ hơn tên thật */
-  .card-top.unk .name{font-style:italic;font-weight:500;color:var(--ink-soft);}
+  .card-top.unk .name{font-style:italic;font-weight:500;color:var(--ink-meta);}
 
   /* ===== Trunk (Đời 1-7) — simple vertical chain ===== */
   .trunk-wrap{max-width:760px;margin:40px auto 0;padding:0 20px;}
@@ -213,7 +221,8 @@
   }
   .trunk-item:last-child{border-bottom:none;}
   .trunk-item .gen-badge{
-    font-family:'Lora',serif;font-weight:700;font-size:12px;color:var(--blue);
+    font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:var(--fs-meta);color:var(--blue);
+    font-variant-numeric:tabular-nums;
     text-align:right;white-space:nowrap;
     /* canh nhãn Đời theo dòng tên, không lơ lửng giữa thẻ dài */
     padding-top:calc(11px + var(--top-h) / 2 - 9px);
@@ -238,7 +247,7 @@
   .fork-col .trunk-content .card-body{margin-left:0;}
   .fork-col > ul.desc-root{margin:0;}
   .card-body .pin{
-    margin-top:8px;padding:7px 10px;background:var(--gold-bg);border:1px solid var(--gold);border-radius:7px;
+    margin-top:8px;padding:7px 11px;background:var(--gold-bg);border:1px solid var(--gold);border-radius:7px;
     font-style:normal;color:#5b4310;
   }
   .chain{margin:0 0 0 30px;}
@@ -303,17 +312,18 @@
 
   blockquote.bio{
     margin:8px 0 10px var(--card-gap);
-    padding:9px 14px;
+    padding:12px 18px 13px;
     background:var(--paper);
     border-left:3px solid var(--gold);
-    border-radius:0 8px 8px 0;
+    border-radius:0 10px 10px 0;
     font-family:'Lora',serif;
     font-style:italic;
-    font-weight:500;
-    font-size:12px;
-    line-height:1.6;
-    color:var(--ink-note);
-    max-width:640px;
+    font-weight:400;
+    font-size:var(--fs-quote);
+    line-height:1.65;
+    color:var(--ink-quote);
+    max-width:680px;
+    text-wrap:pretty;
   }
 
   footer{text-align:center;margin-top:60px;font-size:11px;color:var(--ink-soft);padding:0 20px;white-space:pre-line;line-height:1.6;}
@@ -321,26 +331,24 @@
   /* ===== Mobile (iPhone): thang chữ lớn hơn, thụt lề gọn hơn ===== */
   @media (max-width:640px){
     :root{
-      --fs-name:16px;
-      --fs-note:13px;
-      --fs-meta:12px;
-      --fs-tag:11px;
-      --av:30px;
-      --top-h:45px;
+      /* cùng thang chữ với desktop — chỉ thu avatar & khoảng cách */
+      --av:28px;
+      --top-h:42px;
       --card-gap:22px;
     }
     header{padding:48px 18px 36px;}
     h1{font-size:28px;}
     .chi-block,.trunk-wrap,.ncp-title{padding:0 12px;}
-    .card-body{padding:10px 11px 11px;}
-    .card-top{column-gap:9px;}
+    .card-body{padding:11px 12px 12px;}
+    .card-top{column-gap:10px;}
+    /* màn hẹp: ghi chú & vợ/chồng dùng trọn bề ngang thẻ để không bị bóp ở các đời sâu */
+    .note,.spouse-row{margin-left:0;}
     /* mỗi cấp thụt 21px (trước ~52px) — Đời 14 vẫn đủ chỗ cho tên trên iPhone 375px */
     ul.desc-children,.fork-col .desc-children{padding-left:9px;--li-pad:12px;}
     .chain{margin-left:10px;}
     .chain-stem{margin-left:36px;}
     .trunk-item{grid-template-columns:40px 1fr;column-gap:8px;}
-    blockquote.bio{margin-left:var(--card-gap);font-size:12.5px;}
-    .count{padding:2px 8px;}
+    blockquote.bio{margin-left:var(--card-gap);padding:10px 14px 11px;}
   }
 </style>
 </head>
@@ -1052,9 +1060,9 @@
         <ul class="desc-children">
           <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Anh</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
 <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Dũng</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Bình</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Bình</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Bộ đội nghỉ hưu, hiện sinh sống tại Hải Phòng.</div></div></li>
 <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Long</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Hoàng</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1981</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Hoàng</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1981</span></span></div><div class="note">Tốt nghiệp ĐH Bách Khoa Hà Nội (2004), hiện sinh sống và làm việc tại Hải Phòng.</div></div></li>
         </ul>
       </details>
     </li>
@@ -1062,11 +1070,11 @@
 <li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thái</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1940</span></span></div><div class="note">Lấy Ông Tân, họ Trần, Bình Định. Con: Trần Xuân Hồng (1969), Trần Thu Hằng (1970, gái), Trần Xuân Hoài (1978)</div></div></li>
 <li>
       <details open>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Linh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">s. 09/05/1945</span><span class="count">2 người con</span></span></div><div class="note">Con út Bà Hai</div><div class="spouse-row">
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Linh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">s. 09/05/1945</span><span class="count">2 người con</span></span></div><div class="note">Con út Bà Hai</div><div class="note">Nghỉ hưu, hiện sinh sống tại Hà Nội.</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
             <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thị Thường</span><span class="meta"><span class="years">s. 1948</span></span></div>
-            
+            <div class="note">Nghỉ hưu, hiện sinh sống tại Hà Nội.</div>
           </div>
         </div></div></summary>
         
