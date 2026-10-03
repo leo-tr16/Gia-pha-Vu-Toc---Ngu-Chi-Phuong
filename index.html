@@ -2,6 +2,8 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e8eaee">
 <title>Gia Phả Vũ Tộc — Thái Bình</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
@@ -23,15 +25,25 @@
     --gold-ink:#8a6522;   /* vàng đậm cho chữ nhỏ — đạt tương phản AA trên nền trắng */
     --gold-rule:#cdb27a;  /* vàng nhạt cho đường kẻ hoạ tiết */
     --ink-body:#2b2f38;   /* mực đọc cho câu dẫn */
+    --ink-note:#515762;   /* mực ghi chú trong thẻ — nhạt hơn bản trước 10% (pha 10% trắng) */
+    /* thang chữ cho thẻ người (desktop) — mobile ghi đè ở cuối file */
+    --fs-name:15px;
+    --fs-note:12px;
+    --fs-meta:11.5px;
+    --fs-tag:10.5px;
+    --av:32px;
+    --top-h:43px;
+    --card-gap:26px;  /* khoảng chừa bên trái thẻ cho nút ▸ — đường nối chạy tới sát thẻ */   /* chiều cao vùng tên + dòng phụ — dùng để canh nút mở/đóng & đường nối */
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
   body{
     margin:0;
     font-family:'Be Vietnam Pro',sans-serif;
     color:var(--ink);
     background:var(--page-bg);
-    padding:0 0 100px;
+    padding:0 0 calc(100px + env(safe-area-inset-bottom,0px));
+    -webkit-font-smoothing:antialiased;
   }
   h1,.serif{font-family:'Lora',serif;}
 
@@ -105,20 +117,32 @@
     background:var(--paper);
     border:1px solid var(--line);
     border-radius:10px;
-    padding:10px 14px;
-    margin-left:24px;
+    padding:11px 14px 12px;
+    margin-left:var(--card-gap);
     box-shadow:0 1px 3px rgba(20,30,50,0.06);
   }
-  .card-top{display:flex;align-items:center;flex-wrap:wrap;gap:7px;}
+  /* tên chiếm trọn dòng 1, thông tin phụ xuống dòng 2 — tên không bị đẩy xuống dòng */
+  .card-top{
+    display:grid;grid-template-columns:var(--av) minmax(0,1fr);
+    column-gap:10px;row-gap:3px;align-items:center;min-height:var(--top-h);
+  }
+  .card-top > .avatar{grid-row:1 / span 2;align-self:center;}
+  .card-top > .name{grid-column:2;align-self:end;}
+  .card-top > .name:last-child{grid-row:1 / span 2;align-self:center;}
+  .card-top .meta{
+    grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;
+    align-self:start;min-width:0;
+  }
   .gen-tag{
-    font-family:'Lora',serif;font-weight:700;font-size:9.5px;color:var(--ink-soft);
-    background:var(--page-bg);border:1px solid var(--line);border-radius:999px;
-    padding:2px 7px;white-space:nowrap;flex:none;
+    font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:var(--fs-tag);
+    color:var(--ink-soft);font-variant-numeric:tabular-nums;letter-spacing:.2px;
+    background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:999px;
+    padding:2px 8px;line-height:1.4;white-space:nowrap;flex:none;
   }
   .avatar{
-    width:26px;height:26px;border-radius:50%;flex:none;
+    width:var(--av);height:var(--av);border-radius:50%;flex:none;
     display:flex;align-items:center;justify-content:center;
-    font-size:12px;color:#fff;
+    font-size:calc(var(--av) * .48);line-height:1;color:#fff;
   }
   .card-body.male .avatar{background:var(--blue);}
   .card-body.female .avatar{background:var(--green);}
@@ -127,12 +151,23 @@
   .spouse-card.female .avatar.sp{border-color:var(--green);color:var(--green);}
   .card-body.male{background:var(--blue-bg);}
   .card-body.female{background:var(--green-bg);}
-  .name{font-family:'Lora',serif;font-weight:600;font-size:13.5px;color:var(--ink);}
-  .years{font-size:10.5px;color:var(--ink-soft);white-space:nowrap;}
-  .note{font-size:10.5px;color:var(--ink-soft);font-style:italic;margin-top:4px;line-height:1.4;}
+  .name{
+    font-family:'Lora',serif;font-weight:600;font-size:var(--fs-name);line-height:1.3;
+    color:var(--ink);letter-spacing:.1px;
+  }
+  .years{
+    font-size:var(--fs-meta);font-weight:500;color:var(--ink-soft);white-space:nowrap;
+    font-variant-numeric:tabular-nums;letter-spacing:.2px;
+  }
+  .note{
+    font-size:var(--fs-note);font-weight:400;font-style:normal;color:var(--ink-note);
+    margin-top:6px;line-height:1.55;text-wrap:pretty;overflow-wrap:break-word;
+  }
+  .note strong{font-weight:600;color:var(--ink);}
   .count{
-    font-size:9.5px;color:var(--ink-soft);margin-left:auto;flex:none;
-    background:var(--page-bg);border:1px solid var(--line);border-radius:999px;padding:2px 8px;
+    font-size:var(--fs-tag);font-weight:500;color:var(--ink-soft);flex:none;
+    font-variant-numeric:tabular-nums;line-height:1.4;
+    background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:999px;padding:2px 9px;
   }
 
   .card-body.c-blue{border-left:4px solid var(--blue);}
@@ -142,22 +177,27 @@
   .card-body.c-green2{border-left:4px solid var(--green2);}
   .card-body.adopted{border-style:dashed;}
   .adopt-tag{
-    font-size:9px;color:var(--ink-soft);background:var(--page-bg);
+    font-size:var(--fs-tag);color:var(--ink-soft);background:var(--page-bg);
     border:1px solid var(--line);border-radius:999px;padding:1px 6px;
     font-style:normal;font-weight:600;
   }
 
   .spouse-row{
     display:flex;align-items:flex-start;gap:8px;
-    margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);
+    margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);
   }
   .knot{color:var(--gold);display:inline-flex;align-items:center;margin-top:4px;flex:none;}
   .spouse-card{
     flex:1;min-width:0;
     background:var(--page-bg);border:1px solid var(--line);border-radius:8px;
-    padding:7px 10px;
+    padding:8px 11px;
   }
-  .spouse-card .card-top{gap:6px;}
+  .spouse-card .card-top{--av:26px;--top-h:34px;column-gap:8px;row-gap:1px;}
+  .spouse-card .name{font-size:calc(var(--fs-name) - 1px);}
+  .spouse-card .years{font-size:calc(var(--fs-meta) - .5px);}
+  .spouse-card .note{margin-top:4px;}
+  /* tên khuyết: "(chưa rõ tên)" — nhạt, nghiêng, nhẹ hơn tên thật */
+  .card-top.unk .name{font-style:italic;font-weight:500;color:var(--ink-soft);}
 
   /* ===== Trunk (Đời 1-7) — simple vertical chain ===== */
   .trunk-wrap{max-width:760px;margin:40px auto 0;padding:0 20px;}
@@ -168,19 +208,21 @@
   }
   ul.trunk-list{list-style:none;margin:0;padding:0;}
   .trunk-item{
-    display:grid;grid-template-columns:56px 1fr;column-gap:16px;align-items:center;
+    display:grid;grid-template-columns:56px 1fr;column-gap:16px;align-items:start;
     padding:12px 0;border-bottom:1px solid var(--line);
   }
   .trunk-item:last-child{border-bottom:none;}
   .trunk-item .gen-badge{
     font-family:'Lora',serif;font-weight:700;font-size:12px;color:var(--blue);
     text-align:right;white-space:nowrap;
+    /* canh nhãn Đời theo dòng tên, không lơ lửng giữa thẻ dài */
+    padding-top:calc(11px + var(--top-h) / 2 - 9px);
   }
   .trunk-content{display:flex;}
   .trunk-content .card-body{width:100%;margin-left:0;}
 
   .trunk-item.fork-item{align-items:start;}
-  .trunk-item.fork-item .gen-badge{padding-top:52px;}
+  .trunk-item.fork-item .gen-badge{padding-top:calc(49px + 11px + var(--top-h) / 2 - 9px);}
   .fork-wrap{position:relative;padding-top:20px;}
   .fork-wrap::before{content:'';position:absolute;top:0;left:50%;width:2px;height:10px;background:var(--line);margin-left:-1px;}
   .fork-cols{display:flex;align-items:flex-start;position:relative;}
@@ -196,12 +238,11 @@
   .fork-col .trunk-content .card-body{margin-left:0;}
   .fork-col > ul.desc-root{margin:0;}
   .card-body .pin{
-    margin-top:7px;padding:6px 9px;background:var(--gold-bg);border:1px solid var(--gold);border-radius:7px;
+    margin-top:8px;padding:7px 10px;background:var(--gold-bg);border:1px solid var(--gold);border-radius:7px;
     font-style:normal;color:#5b4310;
   }
   .chain{margin:0 0 0 30px;}
-  .fork-col .desc-children{padding-left:18px;}
-  .fork-col .desc-children > li{padding-left:16px;}
+  .fork-col .desc-children{padding-left:18px;--li-pad:16px;}
   .chain-stem{width:2px;height:9px;background:var(--line);margin:0 0 0 40px;}
   .chain > .card-body{margin-left:24px;}
   .ncp-title{max-width:760px;margin:46px auto 0;padding:0 20px;}
@@ -213,9 +254,8 @@
     .fork-col + .fork-col{margin-left:0;margin-top:18px;}
     .fork-wrap{padding-top:4px;}
     .fork-wrap::before,.fork-cols::before,.fork-col::before{display:none;}
-    .trunk-item.fork-item .gen-badge{padding-top:30px;}
-    .fork-col .desc-children{padding-left:12px;}
-    .fork-col .desc-children > li{padding-left:14px;}
+    .trunk-item.fork-item .gen-badge{padding-top:calc(33px + 11px + var(--top-h) / 2 - 9px);}
+    .fork-col .desc-children{padding-left:12px;--li-pad:14px;}
     .chain{margin-left:14px;}
   }
 
@@ -230,16 +270,16 @@
   }
 
   ul.desc-root{list-style:none;margin:0;padding:0;}
-  ul.desc-children{list-style:none;margin:6px 0 0 0;padding:0 0 0 30px;position:relative;}
+  ul.desc-children{--li-pad:22px;list-style:none;margin:6px 0 0 0;padding:0 0 0 30px;position:relative;}
 
-  ul.desc-children > li{position:relative;padding-left:22px;margin:7px 0;}
+  ul.desc-children > li{position:relative;padding-left:var(--li-pad);margin:7px 0;}
   ul.desc-children > li::before{
-    content:'';position:absolute;left:0;top:20px;width:18px;height:2px;background:var(--line);
+    content:'';position:absolute;left:0;top:calc(11px + var(--top-h) / 2);width:calc(var(--li-pad) + var(--card-gap));height:2px;background:var(--line);
   }
   ul.desc-children > li::after{
     content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--line);
   }
-  ul.desc-children > li:last-child::after{bottom:auto;height:20px;}
+  ul.desc-children > li:last-child::after{bottom:auto;height:calc(12px + var(--top-h) / 2);}
 
   details > summary{
     position:relative;
@@ -250,10 +290,10 @@
   details > summary::marker{content:'';}
   details > summary::before{
     content:'▸';
-    position:absolute;left:0;top:11px;z-index:2;
-    width:18px;height:18px;border-radius:50%;
+    position:absolute;left:0;top:calc(12px + var(--top-h) / 2 - 10px);z-index:2;
+    width:20px;height:20px;border-radius:50%;
     background:var(--paper);border:1px solid var(--line);
-    color:var(--ink-soft);font-size:9px;line-height:16px;font-weight:700;
+    color:var(--ink-soft);font-size:10px;line-height:18px;font-weight:700;
     text-align:center;
   }
   details[open] > summary::before{content:'▾';}
@@ -262,7 +302,7 @@
   details:not([open]) > summary .count{display:inline-block;}
 
   blockquote.bio{
-    margin:8px 0 10px 26px;
+    margin:8px 0 10px var(--card-gap);
     padding:9px 14px;
     background:var(--paper);
     border-left:3px solid var(--gold);
@@ -270,13 +310,38 @@
     font-family:'Lora',serif;
     font-style:italic;
     font-weight:500;
-    font-size:11.5px;
+    font-size:12px;
     line-height:1.6;
-    color:var(--ink-soft);
+    color:var(--ink-note);
     max-width:640px;
   }
 
   footer{text-align:center;margin-top:60px;font-size:11px;color:var(--ink-soft);padding:0 20px;white-space:pre-line;line-height:1.6;}
+
+  /* ===== Mobile (iPhone): thang chữ lớn hơn, thụt lề gọn hơn ===== */
+  @media (max-width:640px){
+    :root{
+      --fs-name:16px;
+      --fs-note:13px;
+      --fs-meta:12px;
+      --fs-tag:11px;
+      --av:30px;
+      --top-h:45px;
+      --card-gap:22px;
+    }
+    header{padding:48px 18px 36px;}
+    h1{font-size:28px;}
+    .chi-block,.trunk-wrap,.ncp-title{padding:0 12px;}
+    .card-body{padding:10px 11px 11px;}
+    .card-top{column-gap:9px;}
+    /* mỗi cấp thụt 21px (trước ~52px) — Đời 14 vẫn đủ chỗ cho tên trên iPhone 375px */
+    ul.desc-children,.fork-col .desc-children{padding-left:9px;--li-pad:12px;}
+    .chain{margin-left:10px;}
+    .chain-stem{margin-left:36px;}
+    .trunk-item{grid-template-columns:40px 1fr;column-gap:8px;}
+    blockquote.bio{margin-left:var(--card-gap);font-size:12.5px;}
+    .count{padding:2px 8px;}
+  }
 </style>
 </head>
 <body>
@@ -308,18 +373,18 @@
       <div class="trunk-content"><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đạo Chính</span></div><div class="note">Cụ Thủy Tổ. Trong gia phả ghi không rõ năm sinh nhưng dự đoán năm sinh khoảng từ 1625 đến 1630 (đời vua Lê Thần Tông; chúa Trịnh là Trịnh Tráng, chúa Nguyễn là Nguyễn Phúc Loan). Không rõ năm mất. Dự đoán trên do người dịch gia phả đối chiếu, phỏng vấn nhiều bô lão trong họ tộc cùng với việc khảo cứu trong tài liệu Niên Biểu Việt Nam</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Từ Nhân</span><span class="years">s. 1608</span></div>
+            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Từ Nhân</span><span class="meta"><span class="years">s. 1608</span></span></div>
             
           </div>
         </div></div></div>
     </li>
 <li class="trunk-item">
       <span class="gen-badge">Đời 2</span>
-      <div class="trunk-content"><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">(chưa rõ tên thật)</span></div><div class="note">Tên cúng: Khuyến Chánh</div></div></div>
+      <div class="trunk-content"><div class="card-body c-green male"><div class="card-top unk"><span class="avatar">♂</span><span class="name">(chưa rõ tên thật)</span></div><div class="note">Tên cúng: Khuyến Chánh</div></div></div>
     </li>
 <li class="trunk-item">
       <span class="gen-badge">Đời 3</span>
-      <div class="trunk-content"><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">(chưa rõ tên thật)</span></div><div class="note">Tên cúng: Đôn Thục</div></div></div>
+      <div class="trunk-content"><div class="card-body c-grey male"><div class="card-top unk"><span class="avatar">♂</span><span class="name">(chưa rõ tên thật)</span></div><div class="note">Tên cúng: Đôn Thục</div></div></div>
     </li>
 <li class="trunk-item">
       <span class="gen-badge">Đời 4</span>
@@ -333,20 +398,20 @@
     </li>
 <li class="trunk-item">
       <span class="gen-badge">Đời 5</span>
-      <div class="trunk-content"><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kế</span><span class="years">1726 – 1787</span></div><div class="note">Trung Ngôn</div><div class="spouse-row">
+      <div class="trunk-content"><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kế</span><span class="meta"><span class="years">1726 – 1787</span></span></div><div class="note">Trung Ngôn</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Đỗ Thị Điều</span><span class="years">1737 – 1788</span></div>
+            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Đỗ Thị Điều</span><span class="meta"><span class="years">1737 – 1788</span></span></div>
             
           </div>
         </div></div></div>
     </li>
 <li class="trunk-item">
       <span class="gen-badge">Đời 6</span>
-      <div class="trunk-content"><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thiệu</span><span class="years">1770 – 1854</span></div><div class="note">Cẩn Thành, Xã trưởng</div><div class="spouse-row">
+      <div class="trunk-content"><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thiệu</span><span class="meta"><span class="years">1770 – 1854</span></span></div><div class="note">Cẩn Thành, Xã trưởng</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Chu Thị Quyến</span><span class="years">1780 – 1868</span></div>
+            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Chu Thị Quyến</span><span class="meta"><span class="years">1780 – 1868</span></span></div>
             <div class="note">Từ Trai</div>
           </div>
         </div></div></div>
@@ -360,18 +425,18 @@
 <ul class="desc-root">
 <li>
 <details>
-<summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thạc</span><span class="years">1797 – 1842</span></div><div class="note">Con trưởng Cụ Thiệu — lập Ngành trưởng, ngoài Ngũ Chi Phương</div><div class="note pin">Hậu duệ: <strong>Vũ Đức Hà</strong> (Đời 11, sinh 1943) — Trưởng họ, hương khói từ đường thờ tổ họ Vũ Thái Bình</div></div></summary>
+<summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thạc</span><span class="meta"><span class="years">1797 – 1842</span></span></div><div class="note">Con trưởng Cụ Thiệu — lập Ngành trưởng, ngoài Ngũ Chi Phương</div><div class="note pin">Hậu duệ: <strong>Vũ Đức Hà</strong> (Đời 11, sinh 1943) — Trưởng họ, hương khói từ đường thờ tổ họ Vũ Thái Bình</div></div></summary>
 <div class="chain">
 <div class="chain-stem"></div>
-<div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 8</span><span class="avatar">♂</span><span class="name">Vũ Đức Cơ</span><span class="years">1831</span></div></div>
+<div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Cơ</span><span class="meta"><span class="gen-tag">Đời 8</span><span class="years">1831</span></span></div></div>
 <div class="chain-stem"></div>
-<div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Giảng</span><span class="years">1884</span></div></div>
+<div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Giảng</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1884</span></span></div></div>
 <div class="chain-stem"></div>
-<div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Cợt</span><span class="years">1911</span></div></div>
+<div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Cợt</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1911</span></span></div></div>
 <ul class="desc-children">
 <li>
       <details open>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hà</span><span class="years">1943</span><span class="count">5 người con</span></div><div class="note">Trưởng họ — hương khói từ đường thờ tổ họ Vũ Thái Bình; tổ chức lễ Thanh Minh hằng năm</div><div class="spouse-row">
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hà</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1943</span><span class="count">5 người con</span></span></div><div class="note">Trưởng họ — hương khói từ đường thờ tổ họ Vũ Thái Bình; tổ chức lễ Thanh Minh hằng năm</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
             <div class="card-top"><span class="avatar sp">♀</span><span class="name">Chu Thị Minh</span></div>
@@ -380,21 +445,21 @@
         </div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Hưng</span><span class="years">1970</span></div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Dung</span><span class="years">1973</span></div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Nhung</span><span class="years">1976</span></div></div></li>
-<li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thành</span><span class="years">1981</span></div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Hằng</span><span class="years">1981</span></div></div></li>
+          <li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hưng</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1970</span></span></div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Dung</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1973</span></span></div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Nhung</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1976</span></span></div></div></li>
+<li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thành</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1981</span></span></div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Hằng</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1981</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Tham</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tham</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Công</span></div></div></li>
-<li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Đoàn</span></div></div></li>
+          <li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Công</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đoàn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -406,10 +471,10 @@
 </div>
 <div class="fork-col">
 <span class="fork-tag main">Con thứ · Ngành thứ — Ngũ Chi Phương</span>
-<div class="trunk-content"><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Mậu</span><span class="years">1805 – 1889</span></div><div class="note">Trung Hòa — con thứ Cụ Thiệu. Cụ Tổ Ngũ Chi Phương: sinh 5 con trai, mỗi người lập một Chi. Sinh năm 1805 Ất Sửu (đời Gia Long 4), mất năm 1889 (đời Thành Thái 1). Gia phả dòng họ hay ghi là cụ Vũ Đức Hòa</div><div class="spouse-row">
+<div class="trunk-content"><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Mậu</span><span class="meta"><span class="years">1805 – 1889</span></span></div><div class="note">Trung Hòa — con thứ Cụ Thiệu. Cụ Tổ Ngũ Chi Phương: sinh 5 con trai, mỗi người lập một Chi. Sinh năm 1805 Ất Sửu (đời Gia Long 4), mất năm 1889 (đời Thành Thái 1). Gia phả dòng họ hay ghi là cụ Vũ Đức Hòa</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">(chưa rõ tên thật)</span></div>
+            <div class="card-top unk"><span class="avatar sp">♀</span><span class="name">(chưa rõ tên thật)</span></div>
             <div class="note">Chính thất — con gái Cụ Tú Đường, họ Nguyễn; mẹ của cả 5 con trai. Kế thất: Dương Thị Chỉ (Đồng Sâm, Kiến Xương), không có con</div>
           </div>
         </div></div></div>
@@ -426,42 +491,42 @@
   <ul class="desc-root">
     <li>
       <details>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 8</span><span class="avatar">♂</span><span class="name">Vũ Đức Rương</span><span class="years">1828</span><span class="count">3 người con</span></div><div class="note">Thường gọi Chánh Rương, có làm chánh tổng — Cụ Tổ Chi 1. Sinh 3 trai 2 gái (2 gái chưa rõ tên: 1 bà lấy ông Nguyễn Khắc Cần, thường gọi Tổng Cần — phó tổng chính thức; 1 bà lấy ông Đội Thận, ở Vọng Lỗ)</div></div></summary>
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Rương</span><span class="meta"><span class="gen-tag">Đời 8</span><span class="years">1828</span><span class="count">3 người con</span></span></div><div class="note">Thường gọi Chánh Rương, có làm chánh tổng — Cụ Tổ Chi 1. Sinh 3 trai 2 gái (2 gái chưa rõ tên: 1 bà lấy ông Nguyễn Khắc Cần, thường gọi Tổng Cần — phó tổng chính thức; 1 bà lấy ông Đội Thận, ở Vọng Lỗ)</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Ro</span><span class="count">2 người con</span></div><div class="note">Thường gọi Cửu Ro — con trưởng, 2 trai 2 gái</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ro</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">2 người con</span></span></div><div class="note">Thường gọi Cửu Ro — con trưởng, 2 trai 2 gái</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Thê</span><span class="count">4 người con</span></div><div class="note">Con cả — 4 trai 1 gái (gái lấy chồng làng Vọng Lỗ)</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thê</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div><div class="note">Con cả — 4 trai 1 gái (gái lấy chồng làng Vọng Lỗ)</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Xiển</span><span class="years">1901</span><span class="count">4 người con</span></div><div class="note">Vợ họ Nguyễn, con gái cụ Vang (s.1904) — 4 trai 3 gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Xiển</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1901</span><span class="count">4 người con</span></span></div><div class="note">Vợ họ Nguyễn, con gái cụ Vang (s.1904) — 4 trai 3 gái</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Đợt</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đợt</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Ưu</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Tênh</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ưu</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tênh</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Hích</span></div><div class="note">Hy sinh trong kháng chiến, chưa có vợ</div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Lực</span></div><div class="note">Mất sớm</div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hích</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Hy sinh trong kháng chiến, chưa có vợ</div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Lực</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Mất sớm</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Tộ</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tộ</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Bích</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bích</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -470,46 +535,46 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhương</span><span class="count">4 người con</span></div><div class="note">Vợ họ Nguyễn, con gái Ông Quản Nhuận thôn Chính — 4 trai 1 gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhương</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">4 người con</span></span></div><div class="note">Vợ họ Nguyễn, con gái Ông Quản Nhuận thôn Chính — 4 trai 1 gái</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Khoán</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khoán</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Thuần</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Thăng</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thuần</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thăng</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Văn</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Văn</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Mạnh</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Mạnh</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Bột</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bột</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Dũng</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Đoát</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Hưởng</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Dũng</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đoát</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hưởng</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Bát</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bát</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Bình</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Quyến</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bình</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Quyến</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -518,28 +583,28 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Ma</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ma</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Nghinh</span><span class="count">5 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nghinh</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">5 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Bảo</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bảo</span><span class="meta"><span class="gen-tag">Đời 13</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 14</span><span class="avatar">♂</span><span class="name">Vũ Đức Cầm</span></div></div></li>
-<li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 14</span><span class="avatar">♂</span><span class="name">Vũ Đức Tuyên</span></div></div></li>
+          <li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Cầm</span><span class="meta"><span class="gen-tag">Đời 14</span></span></div></div></li>
+<li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tuyên</span><span class="meta"><span class="gen-tag">Đời 14</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Đảm</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhiệm</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhãn</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhẫn</span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đảm</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhiệm</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhãn</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhẫn</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -548,10 +613,10 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Mộng</span><span class="count">1 người con</span></div><div class="note">Thường gọi Tý — vợ cùng làng, con Ông Nhẫm</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Mộng</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div><div class="note">Thường gọi Tý — vợ cùng làng, con Ông Nhẫm</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Cót</span></div><div class="note">Lấy Phụ trong làng</div></div></li>
+          <li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Cót</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Lấy Phụ trong làng</div></div></li>
         </ul>
       </details>
     </li>
@@ -560,82 +625,82 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Đoan</span><span class="count">1 người con</span></div><div class="note">Con bà hai — không có con trai</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đoan</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div><div class="note">Con bà hai — không có con trai</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Thưởng</span></div></div></li>
+          <li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thưởng</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
         </ul>
       </details>
     </li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Phong</span></div><div class="note">Thường gọi Tổng Phong — phó tổng tăng thêm. Bị giặc giết năm 1890, không có con (bà Tổng Phong sau tái giá lấy ông Chánh Rụ ở Cổ Tiết)</div></div></li>
+<li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phong</span><span class="meta"><span class="gen-tag">Đời 9</span></span></div><div class="note">Thường gọi Tổng Phong — phó tổng tăng thêm. Bị giặc giết năm 1890, không có con (bà Tổng Phong sau tái giá lấy ông Chánh Rụ ở Cổ Tiết)</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Phiêu</span><span class="count">3 người con</span></div><div class="note">Thường gọi Cựu Phiêu — làm lí trưởng cựu. 2 bà vợ: Bà Cả làng An Dân (1 trai Vũ Đức Hoạch, 1 gái lấy chồng bên Đông); Bà Hai làng An Dân (1 trai Vũ Đức Niên, 1 gái Vũ Thị Bèo)</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phiêu</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">3 người con</span></span></div><div class="note">Thường gọi Cựu Phiêu — làm lí trưởng cựu. 2 bà vợ: Bà Cả làng An Dân (1 trai Vũ Đức Hoạch, 1 gái lấy chồng bên Đông); Bà Hai làng An Dân (1 trai Vũ Đức Niên, 1 gái Vũ Thị Bèo)</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Hoạch</span><span class="count">5 người con</span></div><div class="note">Con trưởng — vợ họ Nguyễn, con gái ông Tuệ, em gái ông Huê</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hoạch</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">5 người con</span></span></div><div class="note">Con trưởng — vợ họ Nguyễn, con gái ông Tuệ, em gái ông Huê</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Phầu</span></div><div class="note">Hy sinh trong kháng chiến, chưa có vợ</div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Bồn</span></div><div class="note">Chết do bom đạn bổ vào làng</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Na</span></div><div class="note">Chồng là Nhân, làng Vọng Lỗ</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Nết</span></div><div class="note">Lấy chồng trong làng</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Hồng</span></div><div class="note">Lấy chồng trong làng</div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phầu</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Hy sinh trong kháng chiến, chưa có vợ</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bồn</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Chết do bom đạn bổ vào làng</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Na</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Chồng là Nhân, làng Vọng Lỗ</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Nết</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Lấy chồng trong làng</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Hồng</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Lấy chồng trong làng</div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Niên</span><span class="count">7 người con</span></div><div class="note">Con thứ — vợ người thôn Chính</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Niên</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">7 người con</span></span></div><div class="note">Con thứ — vợ người thôn Chính</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Ngải</span><span class="count">4 người con</span></div><div class="note">Con trưởng — đi công tác, đã nghỉ hưu, vợ con Ông Tiết trong làng. 4 trai 1 gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ngải</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">4 người con</span></span></div><div class="note">Con trưởng — đi công tác, đã nghỉ hưu, vợ con Ông Tiết trong làng. 4 trai 1 gái</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thôn</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Xuyên</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Xuyềnh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Tuyền</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thôn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Xuyên</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Xuyềnh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tuyền</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Kếnh</span><span class="count">5 người con</span></div><div class="note">Con thứ 2 — vợ người làng Hoè Nha</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kếnh</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">5 người con</span></span></div><div class="note">Con thứ 2 — vợ người làng Hoè Nha</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Xuyênh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Kênh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Ký</span></div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Lấn</span></div><div class="note">Lấy chồng làng Gang</div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Biến</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Xuyênh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kênh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ký</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Lấn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Lấy chồng làng Gang</div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Biến</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Lãm</span></div><div class="note">Con thứ 3 — vợ người xã Thụy Lương, 2 vợ chồng thoát li công tác, nay hưu ở Thị xã Thái Bình. 4 con trai (chưa rõ tên)</div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Bốn</span></div><div class="note">Con thứ 4 — đi công tác thoát li, 1 con trai (chưa rõ tên), gia đình ở Tây Ninh</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Lãm</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Con thứ 3 — vợ người xã Thụy Lương, 2 vợ chồng thoát li công tác, nay hưu ở Thị xã Thái Bình. 4 con trai (chưa rõ tên)</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bốn</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Con thứ 4 — đi công tác thoát li, 1 con trai (chưa rõ tên), gia đình ở Tây Ninh</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Năm</span><span class="count">1 người con</span></div><div class="note">Con thứ 5 — đi công tác, gia đình ở Vĩnh Phú. 1 trai 1 gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Năm</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div><div class="note">Con thứ 5 — đi công tác, gia đình ở Vĩnh Phú. 1 trai 1 gái</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Phú</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phú</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Len</span></div><div class="note">Mất sớm</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Lục</span></div><div class="note">Chết do bom địch</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Len</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Mất sớm</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Lục</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Chết do bom địch</div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Bèo</span></div><div class="note">Lấy ông Tín cùng làng</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Bèo</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div><div class="note">Lấy ông Tín cùng làng</div></div></li>
         </ul>
       </details>
     </li>
@@ -649,7 +714,7 @@
   <ul class="desc-root">
     <li>
       <details open>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 8</span><span class="avatar">♂</span><span class="name">Vũ Đức Tiên</span><span class="years">1830 – 1912</span><span class="count">9 người con</span></div><div class="note">Cụ Bá Tiên, đỗ Nhị trường, quyền Bá hộ — Cụ Tổ Chi 2</div><div class="note">Tên cúng Bác Văn — sinh năm Minh Mạng thứ 10</div><div class="spouse-row">
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tiên</span><span class="meta"><span class="gen-tag">Đời 8</span><span class="years">1830 – 1912</span><span class="count">9 người con</span></span></div><div class="note">Cụ Bá Tiên, đỗ Nhị trường, quyền Bá hộ — Cụ Tổ Chi 2</div><div class="note">Tên cúng Bác Văn — sinh năm Minh Mạng thứ 10</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
             <div class="card-top"><span class="avatar sp">♀</span><span class="name">Chu Thị Liên</span></div>
@@ -660,39 +725,39 @@
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Luân</span><span class="years">1860 – 1929</span><span class="count">5 người con</span></div><div class="note">Cụ Giáo Luân — Ngành I</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Luân</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1860 – 1929</span><span class="count">5 người con</span></span></div><div class="note">Cụ Giáo Luân — Ngành I</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Quang Oánh</span><span class="years">1889 – 1955</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Oánh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1889 – 1955</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Quang Khiết</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Khiết</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Ruấn</span><span class="count">6 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Ruấn</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">6 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Duẩn</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Duân</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Choát</span></div></div></li>
-<li><div class="card-body c-blue female"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♀</span><span class="name">Vũ Thị Sim</span></div></div></li>
-<li><div class="card-body c-blue female"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♀</span><span class="name">Vũ Thị Lựu</span></div></div></li>
-<li><div class="card-body c-blue female"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♀</span><span class="name">Vũ Thị Bưởi</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Duẩn</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Duân</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Choát</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Sim</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Lựu</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Bưởi</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Liêu</span><span class="count">1 người con</span></div><div class="note">Công tác ở nhà máy giấy Bãi Bằng, lập gia đình trên đó</div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Liêu</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">1 người con</span></span></div><div class="note">Công tác ở nhà máy giấy Bãi Bằng, lập gia đình trên đó</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Tùng</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Tùng</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -701,78 +766,78 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Quang Ngạn</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Ngạn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Dương</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Dương</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Quang Thặng</span><span class="count">5 người con</span></div><div class="note">5 con trai</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Thặng</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">5 người con</span></span></div><div class="note">5 con trai</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Đản</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Đản</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Ngải</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Quý</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Tuấn</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Ngải</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Quý</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Tuấn</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Cương</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Cương</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Quang Hải</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Hải</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Liêu</span><span class="count">1 người con</span></div><div class="note">Công tác tại Móng Cái</div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Liêu</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">1 người con</span></span></div><div class="note">Công tác tại Móng Cái</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">(chưa rõ tên)</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top unk"><span class="avatar">♂</span><span class="name">(chưa rõ tên)</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Chiều</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Văn</span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Chiều</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Văn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Liêm</span></div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Đậm</span></div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Tuệ</span></div></div></li>
-<li><div class="card-body c-grey male adopted"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Quang Tuynh</span><span class="adopt-tag">con nuôi</span></div><div class="note">Con nuôi của Bà Hai (nhận cháu làm con vì Bà Hai không có con) — sinh 4 con gái</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Liêm</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Đậm</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Tuệ</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey male adopted"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Tuynh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="adopt-tag">con nuôi</span></span></div><div class="note">Con nuôi của Bà Hai (nhận cháu làm con vì Bà Hai không có con) — sinh 4 con gái</div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Trạch</span><span class="years">1862 – 1944</span><span class="count">6 người con</span></div><div class="note">Cụ Thế Long — Ngành II. Thi hương đậu nhị trường, có dạy học, làm thơ</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Trạch</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1862 – 1944</span><span class="count">6 người con</span></span></div><div class="note">Cụ Thế Long — Ngành II. Thi hương đậu nhị trường, có dạy học, làm thơ</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Riến</span><span class="years">1889 – 1963</span><span class="count">3 người con</span></div><div class="note">Con trưởng</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Riến</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1889 – 1963</span><span class="count">3 người con</span></span></div><div class="note">Con trưởng</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Chỉnh</span><span class="years">1913 – 1979</span><span class="count">5 người con</span></div><div class="spouse-row">
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chỉnh</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1913 – 1979</span><span class="count">5 người con</span></span></div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thị Nguyện</span><span class="years">1916 – 1990</span></div>
+            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thị Nguyện</span><span class="meta"><span class="years">1916 – 1990</span></span></div>
             
           </div>
         </div></div></summary>
@@ -780,7 +845,7 @@
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Phược</span><span class="count">2 người con</span></div><div class="spouse-row">
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phược</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">2 người con</span></span></div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
             <div class="card-top"><span class="avatar sp">♀</span><span class="name">Trần Thị Tý</span></div>
@@ -789,64 +854,64 @@
         </div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Hảo</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Tâm</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hảo</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tâm</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Chất</span></div><div class="note">Lấy chồng làng Cải</div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Ngát</span></div><div class="note">Lấy chồng thôn Chính</div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Tý</span></div><div class="note">Lấy chồng trong làng</div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Mịn</span></div><div class="note">Đi công tác, lấy chồng ở Thủy Nguyên, nay lập nghiệp ở Cần Thơ</div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Chất</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Lấy chồng làng Cải</div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Ngát</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Lấy chồng thôn Chính</div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Tý</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Lấy chồng trong làng</div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Mịn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div><div class="note">Đi công tác, lấy chồng ở Thủy Nguyên, nay lập nghiệp ở Cần Thơ</div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Quang Việp</span><span class="years">1924</span><span class="count">3 người con</span></div><div class="note">Vợ: Nguyễn Thị Cợt (thôn Chính) — 2 trai 1 gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Việp</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1924</span><span class="count">3 người con</span></span></div><div class="note">Vợ: Nguyễn Thị Cợt (thôn Chính) — 2 trai 1 gái</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Riệp</span><span class="years">1948</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thám</span><span class="years">1954</span></div><div class="note">Sống ở Hà Nội</div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Mạnh</span><span class="years">1966</span></div><div class="note">Sống ở Thái Bình</div></div></li>
+          <li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Riệp</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1948</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thám</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1954</span></span></div><div class="note">Sống ở Hà Nội</div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Mạnh</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1966</span></span></div><div class="note">Sống ở Thái Bình</div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Biều</span></div><div class="note">Hy sinh trong kháng chiến chống Pháp</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Biều</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Hy sinh trong kháng chiến chống Pháp</div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Như Kính</span><span class="count">2 người con</span></div><div class="note">Thường gọi Ông Kiếng — con thứ 2</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Như Kính</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">2 người con</span></span></div><div class="note">Thường gọi Ông Kiếng — con thứ 2</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Tuấn</span><span class="count">2 người con</span></div><div class="note">Thường gọi Tốn — thoát ly, sống ở Sài Gòn. 2 trai 3 gái (3 gái chưa rõ tên)</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Tuấn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div><div class="note">Thường gọi Tốn — thoát ly, sống ở Sài Gòn. 2 trai 3 gái (3 gái chưa rõ tên)</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Huy</span><span class="years">1944</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Huy</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1944</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Hồng Thao</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Hồng Thao</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quốc Uy</span><span class="years">1947 – 1987</span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quốc Uy</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1947 – 1987</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Bặc</span><span class="count">3 người con</span></div><div class="note">Tự cải là Vũ Mạnh Quyết</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Bặc</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div><div class="note">Tự cải là Vũ Mạnh Quyết</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thắng</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Tâm</span></div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Thị Quyên</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thắng</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tâm</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Quyên</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -855,152 +920,152 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Thế Mỹ</span><span class="count">4 người con</span></div><div class="note">Thường gọi Ông Mỡi — con thứ 3</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Thế Mỹ</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div><div class="note">Thường gọi Ông Mỡi — con thứ 3</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Ngội</span><span class="count">4 người con</span></div><div class="note">Con thứ 1</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Ngội</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">4 người con</span></span></div><div class="note">Con thứ 1</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Khổn</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Quang</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Vinh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thủy</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khổn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Quang</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Vinh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thủy</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Khản</span></div><div class="note">Con thứ 2 — sinh 4 con gái</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khản</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Con thứ 2 — sinh 4 con gái</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Phồn</span><span class="years">1932</span><span class="count">3 người con</span></div><div class="note">Con thứ 3</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phồn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1932</span><span class="count">3 người con</span></span></div><div class="note">Con thứ 3</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Thanh Tân</span><span class="years">1961</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thành</span><span class="years">1966</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Mạnh Cường</span><span class="years">1971</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Thanh Tân</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1961</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thành</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1966</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Mạnh Cường</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1971</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Thuẫn</span><span class="count">1 người con</span></div><div class="note">Con thứ 4 — út</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thuẫn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div><div class="note">Con thứ 4 — út</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Hồng Thái</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Hồng Thái</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Cẩm</span></div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Thụy</span></div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Phèo</span></div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Cẩm</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thụy</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Phèo</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♀</span><span class="name">Vũ Thị Tiêm</span><span class="years">1864 – 1946</span></div><div class="note">Lấy ông Nguyễn Khắc Xưởng cùng làng</div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♀</span><span class="name">Vũ Thị Đượm</span><span class="years">1872 – 1938</span></div><div class="note">Lấy ông Nguyễn Khắc Khơi cùng làng</div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♀</span><span class="name">Vũ Thị Kha</span><span class="years">1879 – 1955</span></div><div class="note">Lấy ông Nguyễn Khắc Nghị cùng làng. Năm 22 tuổi, ông Nghị mất, bà lấy làm vợ kế ông Chỉ Phương, làng An Dân</div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♀</span><span class="name">Vũ Thị Phớt</span><span class="years">1882 – 1955</span></div><div class="note">Lấy ông Nguyễn Khắc Đề. Năm 22 tuổi, ông Đề mất, bà ở vậy nuôi 1 con trai</div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Tiêm</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1864 – 1946</span></span></div><div class="note">Lấy ông Nguyễn Khắc Xưởng cùng làng</div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Đượm</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1872 – 1938</span></span></div><div class="note">Lấy ông Nguyễn Khắc Khơi cùng làng</div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Kha</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1879 – 1955</span></span></div><div class="note">Lấy ông Nguyễn Khắc Nghị cùng làng. Năm 22 tuổi, ông Nghị mất, bà lấy làm vợ kế ông Chỉ Phương, làng An Dân</div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Phớt</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1882 – 1955</span></span></div><div class="note">Lấy ông Nguyễn Khắc Đề. Năm 22 tuổi, ông Đề mất, bà ở vậy nuôi 1 con trai</div></div></li>
 <li>
       <details open>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Lợi Thiệp</span><span class="years">1888 – 1955</span><span class="count">11 người con</span></div><div class="note">Cụ Chánh Tổng (Tổng Tiềm) — Ngành III. Bà Cả: Nguyễn Thị Gấm (1888–1951), mẹ 4 người con đầu. Bà Hai: Nguyễn Thị Uẩn (1903–1979), mẹ 7 người con sau</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Lợi Thiệp</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="years">1888 – 1955</span><span class="count">11 người con</span></span></div><div class="note">Cụ Chánh Tổng (Tổng Tiềm) — Ngành III. Bà Cả: Nguyễn Thị Gấm (1888–1951), mẹ 4 người con đầu. Bà Hai: Nguyễn Thị Uẩn (1903–1979), mẹ 7 người con sau</div></div></summary>
         <blockquote class="bio">Cụ Vũ Lợi Thiệp giữ chức Chánh Tổng, đứng đầu một tổng gồm nhiều làng xã dưới chính quyền thời đó, người dân hay gọi cụ là &quot;Cụ Tổng Tiềm&quot;. Cụ có hai bà vợ, sinh hạ mười một người con, gây dựng nên Ngành III - Ngũ Chi Phương con cháu đông đúc.</blockquote>
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Lâm</span><span class="years">1910 – 1973</span><span class="count">6 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Lâm</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1910 – 1973</span><span class="count">6 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Vẫu</span><span class="count">2 người con</span></div><div class="note">Đổi tên là Vân — làm việc tại nhà máy chè Trần Phú (Hoàng Liên Sơn-Yên Bái) và nghỉ hưu ở đó; có 1 con trai, 1 con gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Vẫu</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div><div class="note">Đổi tên là Vân — làm việc tại nhà máy chè Trần Phú (Hoàng Liên Sơn-Yên Bái) và nghỉ hưu ở đó; có 1 con trai, 1 con gái</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">(chưa rõ tên)</span></div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">(chưa rõ tên)</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top unk"><span class="avatar">♂</span><span class="name">(chưa rõ tên)</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top unk"><span class="avatar">♀</span><span class="name">(chưa rõ tên)</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Cưi</span><span class="count">2 người con</span></div><div class="note">Tốt nghiệp trung cấp Nông nghiệp, lấy vợ Thanh Miện Hải Dương và lập nghiệp tại đó luôn, nghỉ hưu ở Thanh Miện Hải Dương; có 2 cô con gái</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Cưi</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div><div class="note">Tốt nghiệp trung cấp Nông nghiệp, lấy vợ Thanh Miện Hải Dương và lập nghiệp tại đó luôn, nghỉ hưu ở Thanh Miện Hải Dương; có 2 cô con gái</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">(chưa rõ tên)</span></div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">(chưa rõ tên)</span></div></div></li>
+          <li><div class="card-body c-green2 female"><div class="card-top unk"><span class="avatar">♀</span><span class="name">(chưa rõ tên)</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top unk"><span class="avatar">♀</span><span class="name">(chưa rõ tên)</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Liên</span></div><div class="note">Lấy ông Hoạt, thôn Gang</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Liễu</span></div><div class="note">Lấy ông Thạch, An Lão (Hải Phòng)</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Huê</span></div><div class="note">Lấy ông Kỳ, ở Hải Phòng</div></div></li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Thị Tuyết</span></div><div class="note">Lấy ông Thắng, An Lão (Hải Phòng)</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Liên</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Lấy ông Hoạt, thôn Gang</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Liễu</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Lấy ông Thạch, An Lão (Hải Phòng)</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Huê</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Lấy ông Kỳ, ở Hải Phòng</div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Tuyết</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Lấy ông Thắng, An Lão (Hải Phòng)</div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Thảo</span><span class="years">1919</span></div><div class="note">Lấy ông Kiệt xã Thái Học, Thái Ninh</div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Thục</span><span class="years">1922</span></div><div class="note">Lấy ông Lan, nên gọi là Bà Lan</div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Nhung</span><span class="years">1927 – 2026</span></div><div class="note">Lấy ông Chiến, người Huế. Con: Phạm Phú Bình (trai), Thúy, Huyền, Nguyệt (gái)</div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Mạc</span><span class="years">1924 – 2002</span></div><div class="note">Lấy ông Ngô Hữu Lục (1923–2000). Con: Ngô Thị Mùi (1942), Ngô Thị Mây (1946), Ngô Xuân Lịch (1950), Ngô Tiến Việt (1953), Ngô Đình Hùng (1956), Ngô Thị Hương (1960), Ngô Nhật Báo (1965), Ngô Thị Màu (1968)</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thảo</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1919</span></span></div><div class="note">Lấy ông Kiệt xã Thái Học, Thái Ninh</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thục</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1922</span></span></div><div class="note">Lấy ông Lan, nên gọi là Bà Lan</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Nhung</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1927 – 2026</span></span></div><div class="note">Lấy ông Chiến, người Huế. Con: Phạm Phú Bình (trai), Thúy, Huyền, Nguyệt (gái)</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Mạc</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1924 – 2002</span></span></div><div class="note">Lấy ông Ngô Hữu Lục (1923–2000). Con: Ngô Thị Mùi (1942), Ngô Thị Mây (1946), Ngô Xuân Lịch (1950), Ngô Tiến Việt (1953), Ngô Đình Hùng (1956), Ngô Thị Hương (1960), Ngô Nhật Báo (1965), Ngô Thị Màu (1968)</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Lêu</span><span class="years">1928</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Lêu</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1928</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Sửu</span><span class="years">1949</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Sửu</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1949</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Long</span><span class="years">1978</span><span class="count">2 người con</span></div><div class="spouse-row">
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Long</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1978</span><span class="count">2 người con</span></span></div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thu Nga</span><span class="years">s. 1978</span></div>
+            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thu Nga</span><span class="meta"><span class="years">s. 1978</span></span></div>
             
           </div>
         </div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Hùng</span><span class="years">2005</span></div></div></li>
-<li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Trọng</span><span class="years">2011</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hùng</span><span class="meta"><span class="gen-tag">Đời 13</span><span class="years">2005</span></span></div></div></li>
+<li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Trọng</span><span class="meta"><span class="gen-tag">Đời 13</span><span class="years">2011</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Vũ Kim Dung</span><span class="years">1980</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Văn Minh</span><span class="years">1983</span></div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Kim Dung</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1980</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Văn Minh</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1983</span></span></div></div></li>
         </ul>
       </details>
     </li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Cộng</span><span class="years">1930</span></div><div class="note">Tên thật Vũ Thị En — lấy ông Chu Đình Cộng (Chu Toàn). 3 con gái: Chu Thị Mến, Chu Thị Tâm, Chu Thị Lý</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Cộng</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1930</span></span></div><div class="note">Tên thật Vũ Thị En — lấy ông Chu Đình Cộng (Chu Toàn). 3 con gái: Chu Thị Mến, Chu Thị Tâm, Chu Thị Lý</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Lưu</span><span class="years">1932 – 1985</span><span class="count">5 người con</span></div><div class="note">An táng ở Tiên Lãng Hải Phòng</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Lưu</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1932 – 1985</span><span class="count">5 người con</span></span></div><div class="note">An táng ở Tiên Lãng Hải Phòng</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Anh</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Dũng</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Bình</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Long</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Hoàng</span><span class="years">1981</span></div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Anh</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Dũng</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Bình</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Long</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Hoàng</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1981</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Thuy</span><span class="years">1937</span></div><div class="note">Lấy chồng người thôn Ré sinh 1 trai (Trần Xuân Nhật) 1 gái (Trần Thị Hồi)</div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Vũ Thị Thái</span><span class="years">1940</span></div><div class="note">Lấy Ông Tân, họ Trần, Bình Định. Con: Trần Xuân Hồng (1969), Trần Thu Hằng (1970, gái), Trần Xuân Hoài (1978)</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thuy</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1937</span></span></div><div class="note">Lấy chồng người thôn Ré sinh 1 trai (Trần Xuân Nhật) 1 gái (Trần Thị Hồi)</div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Thái</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1940</span></span></div><div class="note">Lấy Ông Tân, họ Trần, Bình Định. Con: Trần Xuân Hồng (1969), Trần Thu Hằng (1970, gái), Trần Xuân Hoài (1978)</div></div></li>
 <li>
       <details open>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Linh</span><span class="years">s. 09/05/1945</span><span class="count">2 người con</span></div><div class="note">Con út Bà Hai</div><div class="spouse-row">
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Linh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">s. 09/05/1945</span><span class="count">2 người con</span></span></div><div class="note">Con út Bà Hai</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
-            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thị Thường</span><span class="years">s. 1948</span></div>
+            <div class="card-top"><span class="avatar sp">♀</span><span class="name">Nguyễn Thị Thường</span><span class="meta"><span class="years">s. 1948</span></span></div>
             
           </div>
         </div></div></summary>
@@ -1008,25 +1073,25 @@
         <ul class="desc-children">
           <li>
       <details open>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Phi Trường</span><span class="years">1981</span><span class="count">4 người con</span></div><div class="note">Con trưởng</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Phi Trường</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1981</span><span class="count">4 người con</span></span></div><div class="note">Con trưởng</div><div class="note">Sống tại Hà Nội. Kỹ sư Cơ Điện tử - ĐH Bách Khoa Hà Nội (2004), Thạc sĩ MBA tại Paris, Pháp (2019).</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Nhật Thành</span><span class="years">2008</span></div><div class="note">Trai cả — sinh viên Học viện Bưu chính Viễn thông</div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang Vinh</span><span class="years">2013</span></div><div class="note">Trai thứ 2</div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Lê Minh</span><span class="years">2024</span></div><div class="note">Trai thứ 3</div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Hoàng Bách</span><span class="years">2025</span></div><div class="note">Trai út</div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Nhật Thành</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">2008</span></span></div><div class="note">Trai cả — sinh viên Học viện Bưu chính Viễn thông</div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Vinh</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">2013</span></span></div><div class="note">Trai thứ 2</div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Lê Minh</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">2024</span></span></div><div class="note">Trai thứ 3</div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Hoàng Bách</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">2025</span></span></div><div class="note">Trai út</div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Thái Sơn</span><span class="years">1982</span></div><div class="note">Con thứ 2</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Thái Sơn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1982</span></span></div><div class="note">Con thứ 2</div></div></li>
         </ul>
       </details>
     </li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♀</span><span class="name">Vũ Thị Lăng</span></div><div class="note">Thọ 60 tuổi</div></div></li>
-<li><div class="card-body c-green female"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♀</span><span class="name">Vũ Thị Hiểu</span></div><div class="note">Thọ 66 tuổi</div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Lăng</span><span class="meta"><span class="gen-tag">Đời 9</span></span></div><div class="note">Thọ 60 tuổi</div></div></li>
+<li><div class="card-body c-green female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Thị Hiểu</span><span class="meta"><span class="gen-tag">Đời 9</span></span></div><div class="note">Thọ 66 tuổi</div></div></li>
         </ul>
       </details>
     </li>
@@ -1037,29 +1102,29 @@
   <ul class="desc-root">
     <li>
       <details>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 8</span><span class="avatar">♂</span><span class="name">Vũ Đức Khiêm</span><span class="years">1833</span><span class="count">3 người con</span></div><div class="note">Cụ Phó Khiêm — Cụ Tổ Chi 3. 2 bà vợ</div></div></summary>
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khiêm</span><span class="meta"><span class="gen-tag">Đời 8</span><span class="years">1833</span><span class="count">3 người con</span></span></div><div class="note">Cụ Phó Khiêm — Cụ Tổ Chi 3. 2 bà vợ</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Vỹ</span><span class="count">3 người con</span></div><div class="note">Con Bà Cả — 3 trai 2 gái</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Vỹ</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">3 người con</span></span></div><div class="note">Con Bà Cả — 3 trai 2 gái</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhợi</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhợi</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Huyễn</span><span class="count">5 người con</span></div><div class="note">Ký Huyễn</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Huyễn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">5 người con</span></span></div><div class="note">Ký Huyễn</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Mơi</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Chôn</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thể</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Đôn</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Vịnh</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Mơi</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chôn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thể</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đôn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Vịnh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1068,60 +1133,36 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Giác</span><span class="count">3 người con</span></div><div class="note">Đậu khóa Sinh, gọi Khoa Giác — sinh 3 trai 2 gái</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Giác</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">3 người con</span></span></div><div class="note">Đậu khóa Sinh, gọi Khoa Giác — sinh 3 trai 2 gái</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Uyển</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Uyển</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Khoa</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Chiên</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Kế</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khoa</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chiên</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kế</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hiện</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hiện</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thuật</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thuật</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hựu</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hựu</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Hoài</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Ninh</span></div></div></li>
-        </ul>
-      </details>
-    </li>
-        </ul>
-      </details>
-    </li>
-<li>
-      <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Kính</span><span class="years">1901 – 1990</span><span class="count">3 người con</span></div><div class="note">Phó lý trưởng — sinh 3 trai 2 gái</div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Điện</span></div><div class="note">Mất sớm</div></div></li>
-<li>
-      <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Thản</span><span class="count">3 người con</span></div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Anh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Danh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Phụng</span></div></div></li>
-        </ul>
-      </details>
-    </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hoàn</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hoài</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ninh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1130,63 +1171,56 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Tuân</span><span class="count">3 người con</span></div><div class="note">Con Bà Hai — 3 trai 1 gái</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kính</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="years">1901 – 1990</span><span class="count">3 người con</span></span></div><div class="note">Phó lý trưởng — sinh 3 trai 2 gái</div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Điện</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Mất sớm</div></div></li>
+<li>
+      <details>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thản</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Anh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Danh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phụng</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hoàn</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+        </ul>
+      </details>
+    </li>
+<li>
+      <details>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tuân</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">3 người con</span></span></div><div class="note">Con Bà Hai — 3 trai 1 gái</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Phô</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phô</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Phủ</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phủ</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Bình</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Bé</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Le</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bình</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bé</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Le</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Sủng</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Sủng</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Sơn</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Tang</span></div></div></li>
-        </ul>
-      </details>
-    </li>
-        </ul>
-      </details>
-    </li>
-<li>
-      <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Tôn</span><span class="count">4 người con</span></div><div class="note">4 con giai</div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Đẩu</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Tỵ</span></div><div class="note">Hy sinh trong chiến tranh</div></div></li>
-<li>
-      <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hược</span><span class="count">3 người con</span></div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Dẫn</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thiên</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Nguyên</span></div></div></li>
-        </ul>
-      </details>
-    </li>
-<li>
-      <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhan</span><span class="count">2 người con</span></div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Bình</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Minh</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Sơn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tang</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1195,15 +1229,46 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Bổng</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tôn</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div><div class="note">4 con giai</div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đẩu</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tỵ</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Hy sinh trong chiến tranh</div></div></li>
+<li>
+      <details>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hược</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Dẫn</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thiên</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nguyên</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+<li>
+      <details>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhan</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bình</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Minh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+        </ul>
+      </details>
+    </li>
+<li>
+      <details>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bổng</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Phương</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Phương</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Trung</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Trung</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1215,11 +1280,11 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Nhạ</span><span class="count">2 người con</span></div><div class="note">Con Bà Hai — không có con trai</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nhạ</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">2 người con</span></span></div><div class="note">Con Bà Hai — không có con trai</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Dần</span></div></div></li>
-<li><div class="card-body c-grey female"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♀</span><span class="name">Bão</span></div></div></li>
+          <li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Dần</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey female"><div class="card-top"><span class="avatar">♀</span><span class="name">Bão</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1233,39 +1298,39 @@
   <ul class="desc-root">
     <li>
       <details>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 8</span><span class="avatar">♂</span><span class="name">Vũ Đức Khoa</span><span class="years">1836</span><span class="count">6 người con</span></div><div class="note">Cụ Đội Khoa — Cụ Tổ Chi 4</div></div></summary>
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khoa</span><span class="meta"><span class="gen-tag">Đời 8</span><span class="years">1836</span><span class="count">6 người con</span></span></div><div class="note">Cụ Đội Khoa — Cụ Tổ Chi 4</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Hy</span><span class="count">2 người con</span></div><div class="note">Đẩu Khóa Hy</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hy</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">2 người con</span></span></div><div class="note">Đẩu Khóa Hy</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Rụ</span><span class="count">4 người con</span></div><div class="note">Lí Rụ</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Rụ</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div><div class="note">Lí Rụ</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Cầu</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Đăng</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Đỉnh</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Môi</span></div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Cầu</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đăng</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đỉnh</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Môi</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Huyến</span><span class="count">1 người con</span></div><div class="note">Phó Huyến</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Huyến</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div><div class="note">Phó Huyến</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hạo</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hạo</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Hiển</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Hải</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Nam</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hiển</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hải</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nam</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1277,38 +1342,38 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Thai</span><span class="count">2 người con</span></div><div class="note">Cựu Thai — 2 trai 2 gái (2 gái chưa rõ tên)</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thai</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">2 người con</span></span></div><div class="note">Cựu Thai — 2 trai 2 gái (2 gái chưa rõ tên)</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Chới</span></div></div></li>
-<li><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Hân</span></div></div></li>
+          <li><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chới</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
+<li><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hân</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Luận</span></div><div class="note">Sinh 2 con gái</div></div></li>
+<li><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Luận</span><span class="meta"><span class="gen-tag">Đời 9</span></span></div><div class="note">Sinh 2 con gái</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Âm</span><span class="count">5 người con</span></div><div class="note">Tuần Âm</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Âm</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">5 người con</span></span></div><div class="note">Tuần Âm</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Hoằng</span><span class="count">4 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hoằng</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Lựu</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Chung</span></div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Lựu</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chung</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Chất</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chất</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Chinh</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chinh</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 13</span><span class="avatar">♂</span><span class="name">Vũ Đức Tuấn</span></div></div></li>
+          <li><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tuấn</span><span class="meta"><span class="gen-tag">Đời 13</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1317,45 +1382,45 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Điệu</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Điệu</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Vinh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Quang</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Vinh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Quang</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Chín</span></div><div class="note">Sinh 1 con gái</div></div></li>
+<li><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chín</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div><div class="note">Sinh 1 con gái</div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Bảy</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bảy</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Chất</span></div></div></li>
-        </ul>
-      </details>
-    </li>
-<li>
-      <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Đầm</span><span class="count">2 người con</span></div><div class="note">2 trai 2 gái (2 gái chưa rõ tên)</div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Huân</span></div><div class="note">Hy sinh trong kháng chiến</div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Tíu</span></div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chất</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Hạnh</span><span class="count">3 người con</span></div><div class="note">3 trai 1 gái (1 gái chưa rõ tên)</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Đầm</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">2 người con</span></span></div><div class="note">2 trai 2 gái (2 gái chưa rõ tên)</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Xuân</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Yến</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Tuyết</span></div><div class="note">Hy sinh trong kháng chiến</div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Huân</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Hy sinh trong kháng chiến</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tíu</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+<li>
+      <details>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hạnh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">3 người con</span></span></div><div class="note">3 trai 1 gái (1 gái chưa rõ tên)</div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Xuân</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Yến</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tuyết</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Hy sinh trong kháng chiến</div></div></li>
         </ul>
       </details>
     </li>
@@ -1364,16 +1429,16 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Tý</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Tý</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Chồi</span><span class="count">2 người con</span></div><div class="note">Cùng vợ sống ở TP. Hồ Chí Minh, với gia đình Vũ Đức Hội</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Chồi</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">2 người con</span></span></div><div class="note">Cùng vợ sống ở TP. Hồ Chí Minh, với gia đình Vũ Đức Hội</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hanh</span></div><div class="note">2 con trai (chưa rõ tên)</div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Hội</span></div><div class="note">Sống ở TP. Hồ Chí Minh</div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hanh</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">2 con trai (chưa rõ tên)</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Hội</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Sống ở TP. Hồ Chí Minh</div></div></li>
         </ul>
       </details>
     </li>
@@ -1382,10 +1447,10 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Thưởng</span><span class="count">1 người con</span></div><div class="note">Thường gọi Phó Thưởng</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thưởng</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">1 người con</span></span></div><div class="note">Thường gọi Phó Thưởng</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Nương</span></div><div class="note">Đi làm ăn xa, biệt tin</div></div></li>
+          <li><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Nương</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div><div class="note">Đi làm ăn xa, biệt tin</div></div></li>
         </ul>
       </details>
     </li>
@@ -1399,26 +1464,26 @@
   <ul class="desc-root">
     <li>
       <details>
-        <summary><div class="card-body c-blue male"><div class="card-top"><span class="gen-tag">Đời 8</span><span class="avatar">♂</span><span class="name">Vũ Đức Ry</span><span class="years">1839</span><span class="count">3 người con</span></div><div class="note">Cụ Tuần Ry — Cụ Tổ Chi 5</div></div></summary>
+        <summary><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Ry</span><span class="meta"><span class="gen-tag">Đời 8</span><span class="years">1839</span><span class="count">3 người con</span></span></div><div class="note">Cụ Tuần Ry — Cụ Tổ Chi 5</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Đức Rũng</span><span class="count">1 người con</span></div><div class="note">Nhi Rũng</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Rũng</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">1 người con</span></span></div><div class="note">Nhi Rũng</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đức Trọng</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Trọng</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Bỉnh</span><span class="count">2 người con</span></div><div class="note">Bằng</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bỉnh</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div><div class="note">Bằng</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Bồi</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Chỉnh</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Bồi</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Chỉnh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1430,33 +1495,33 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Khai Nguyên</span><span class="count">1 người con</span></div><div class="note">Tú tài 1902</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Khai Nguyên</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">1 người con</span></span></div><div class="note">Tú tài 1902</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Thu</span><span class="count">4 người con</span></div><div class="note">Lí trưởng</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Thu</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div><div class="note">Lí trưởng</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Trung</span><span class="count">1 người con</span></div><div class="note">KTS</div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Trung</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div><div class="note">KTS</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Dũng</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Dũng</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 female"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♀</span><span class="name">Vũ Ngọc Chi</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Cần</span></div></div></li>
+<li><div class="card-body c-blue2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Vũ Ngọc Chi</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Cần</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Long</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Long</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Đoan</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Tiến Anh</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Ngọc Anh</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Đoan</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Tiến Anh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Ngọc Anh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1468,50 +1533,32 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-green male"><div class="card-top"><span class="gen-tag">Đời 9</span><span class="avatar">♂</span><span class="name">Vũ Thiên Kiều</span><span class="count">5 người con</span></div><div class="note">Tổng Soạn</div></div></summary>
+        <summary><div class="card-body c-green male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Thiên Kiều</span><span class="meta"><span class="gen-tag">Đời 9</span><span class="count">5 người con</span></span></div><div class="note">Tổng Soạn</div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đình Hoè</span><span class="count">3 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Hoè</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">3 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
           <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Tăn</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Tăn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đình Phường</span></div></div></li>
-<li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đình Minh</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Phường</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
+<li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Minh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Tiến Lợi</span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Tiến Lợi</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Quang Chung</span><span class="years">1952</span><span class="count">2 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang Chung</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="years">1952</span><span class="count">2 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Quang</span><span class="years">1986</span></div></div></li>
-<li><div class="card-body c-green2 female"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♀</span><span class="name">Thủy</span><span class="years">1991</span></div></div></li>
-        </ul>
-      </details>
-    </li>
-        </ul>
-      </details>
-    </li>
-<li>
-      <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đình Doanh</span><span class="count">2 người con</span></div><div class="note">Bùi</div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Kiểm</span></div></div></li>
-<li>
-      <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đức Khoái</span><span class="count">1 người con</span></div></div></summary>
-        
-        <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đức Thái</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Quang</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1986</span></span></div></div></li>
+<li><div class="card-body c-green2 female"><div class="card-top"><span class="avatar">♀</span><span class="name">Thủy</span><span class="meta"><span class="gen-tag">Đời 12</span><span class="years">1991</span></span></div></div></li>
         </ul>
       </details>
     </li>
@@ -1520,34 +1567,52 @@
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đình Phung</span><span class="count">4 người con</span></div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Doanh</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">2 người con</span></span></div><div class="note">Bùi</div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Soái</span></div><div class="note">Hy sinh trong kháng chiến</div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Kiểm</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
 <li>
       <details>
-        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Toàn</span><span class="count">1 người con</span></div></div></summary>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Khoái</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-green2 male"><div class="card-top"><span class="gen-tag">Đời 12</span><span class="avatar">♂</span><span class="name">Vũ Đình Mạnh</span></div></div></li>
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đức Thái</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Thạch</span></div></div></li>
-<li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Thinh</span></div></div></li>
         </ul>
       </details>
     </li>
 <li>
       <details>
-        <summary><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đình Bân</span><span class="count">1 người con</span></div><div class="note">Thường gọi Phổi</div></div></summary>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Phung</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">4 người con</span></span></div></div></summary>
         
         <ul class="desc-children">
-          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="gen-tag">Đời 11</span><span class="avatar">♂</span><span class="name">Vũ Đình Khang</span></div></div></li>
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Soái</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div><div class="note">Hy sinh trong kháng chiến</div></div></li>
+<li>
+      <details>
+        <summary><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Toàn</span><span class="meta"><span class="gen-tag">Đời 11</span><span class="count">1 người con</span></span></div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-green2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Mạnh</span><span class="meta"><span class="gen-tag">Đời 12</span></span></div></div></li>
         </ul>
       </details>
     </li>
-<li><div class="card-body c-grey male"><div class="card-top"><span class="gen-tag">Đời 10</span><span class="avatar">♂</span><span class="name">Vũ Đình Biên</span></div><div class="note">Đi công tác tại Lạng Sơn</div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Thạch</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+<li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Thinh</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+<li>
+      <details>
+        <summary><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Bân</span><span class="meta"><span class="gen-tag">Đời 10</span><span class="count">1 người con</span></span></div><div class="note">Thường gọi Phổi</div></div></summary>
+        
+        <ul class="desc-children">
+          <li><div class="card-body c-blue2 male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Khang</span><span class="meta"><span class="gen-tag">Đời 11</span></span></div></div></li>
+        </ul>
+      </details>
+    </li>
+<li><div class="card-body c-grey male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đình Biên</span><span class="meta"><span class="gen-tag">Đời 10</span></span></div><div class="note">Đi công tác tại Lạng Sơn</div></div></li>
         </ul>
       </details>
     </li>
