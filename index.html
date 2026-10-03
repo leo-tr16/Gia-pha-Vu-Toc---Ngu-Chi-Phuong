@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <title>Gia Phả Vũ Tộc — Thái Bình</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&text=%E4%BA%94%E6%9E%9D%E8%8A%B3&display=swap" rel="stylesheet">
 <style>
   :root{
     --blue:#1d4d85;      --blue-bg:#dce9f7;
@@ -19,6 +20,9 @@
     --page-bg:#e8eaee;
     --gold:#a97e28;
     --gold-bg:#f5e9cc;
+    --gold-ink:#8a6522;   /* vàng đậm cho chữ nhỏ — đạt tương phản AA trên nền trắng */
+    --gold-rule:#cdb27a;  /* vàng nhạt cho đường kẻ hoạ tiết */
+    --ink-body:#2b2f38;   /* mực đọc cho câu dẫn */
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -37,13 +41,41 @@
     background:linear-gradient(180deg,#ffffff,var(--page-bg));
     border-bottom:1px solid var(--line);
   }
-  .eyebrow{letter-spacing:4px;font-size:11.5px;color:var(--blue);font-weight:600;text-transform:uppercase;}
-  h1{font-size:34px;font-weight:700;color:var(--ink);margin:14px 0 16px;letter-spacing:0.3px;}
-  header .sub{font-size:13.5px;color:var(--ink-soft);max-width:660px;margin:0 auto;line-height:1.7;}
-  header .quote{
-    font-family:'Lora',serif;font-style:italic;font-weight:500;
-    font-size:14.5px;color:var(--blue);max-width:600px;margin:24px auto 0;
-    line-height:1.6;position:relative;padding:0 8px;
+  .eyebrow{letter-spacing:4.5px;font-size:11.5px;color:var(--gold-ink);font-weight:600;text-transform:uppercase;}
+  h1{font-size:34px;font-weight:700;color:var(--ink);margin:14px 0 18px;letter-spacing:0.8px;text-wrap:balance;}
+  header .sub{font-size:14px;color:var(--ink-soft);max-width:620px;margin:0 auto;line-height:1.85;text-wrap:pretty;}
+  /* ===== Câu dẫn "Ngũ Chi Phương" ===== */
+  .quote-card{
+    max-width:620px;margin:34px auto 0;
+    padding:28px 44px 26px;
+    background:var(--paper);
+    border:1px solid #dde0e6;border-radius:14px;
+    box-shadow:0 1px 2px rgba(20,30,50,0.03),0 10px 28px -16px rgba(20,30,50,0.14);
+  }
+  .q-orn{display:flex;align-items:center;justify-content:center;gap:18px;margin:0 auto 18px;}
+  .q-orn i{display:block;width:64px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-rule));}
+  .q-orn i:last-child{background:linear-gradient(90deg,var(--gold-rule),transparent);}
+  .q-han{
+    display:inline-flex;gap:14px;
+    font-family:'Noto Serif TC','Songti TC','PMingLiU',serif;font-weight:500;
+    font-size:24px;line-height:1;color:var(--gold-ink);
+  }
+  .q-text{
+    margin:0 auto;max-width:500px;
+    font-family:'Lora',serif;font-style:italic;font-weight:400;
+    font-size:16px;line-height:1.7;color:var(--ink-body);
+    text-wrap:balance;
+  }
+  .q-term{font-weight:600;color:var(--ink);}
+  .q-han-inline{
+    position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;
+  }
+  @media (max-width:640px){
+    .quote-card{padding:22px 20px 20px;margin-top:28px;}
+    .q-orn{gap:12px;margin-bottom:14px;}
+    .q-orn i{width:36px;}
+    .q-han{font-size:21px;gap:10px;}
+    .q-text{font-size:15px;}
   }
   header .fromduong{
     font-size:11.5px;color:var(--ink-soft);margin-top:14px;
@@ -175,7 +207,7 @@
   .ncp-title{max-width:760px;margin:46px auto 0;padding:0 20px;}
   .ncp-title .box{border-top:2px solid var(--green);border-bottom:1px solid var(--line);padding:14px 4px;text-align:center;}
   .ncp-title .eb{display:block;font-size:10.5px;font-weight:700;letter-spacing:2.5px;color:var(--green);text-transform:uppercase;}
-  .ncp-title .tx{display:block;margin-top:6px;font-family:'Lora',serif;font-size:14.5px;line-height:1.6;color:var(--ink);}
+  .ncp-title .tx{display:block;margin-top:6px;font-family:'Lora',serif;font-weight:600;font-size:14.5px;line-height:1.6;color:var(--ink);}
   @media (max-width:640px){
     .fork-cols{flex-direction:column;}
     .fork-col + .fork-col{margin-left:0;margin-top:18px;}
@@ -237,6 +269,7 @@
     border-radius:0 8px 8px 0;
     font-family:'Lora',serif;
     font-style:italic;
+    font-weight:500;
     font-size:11.5px;
     line-height:1.6;
     color:var(--ink-soft);
@@ -251,8 +284,11 @@
 <header>
   <div class="eyebrow">Gia Phả</div>
   <h1>VŨ TỘC · THÁI BÌNH</h1>
-  <div class="sub">Dòng họ Vũ tại Thái Bình khởi nguồn từ Mộ Trạch, Hải Dương, di cư về đất Thụy Chính, Thái Thụy từ thế kỷ XVII. Cụ Thủy Tổ Vũ Đạo Chính lập nghiệp, truyền đến Đời 7 sinh được năm người con trai đều nên người — đời sau gọi là &quot;Ngũ Chi Phương&quot;. Trang này ghi lại phả hệ của cả năm Chi, đời nối đời, để con cháu khắp nơi cùng biết gốc tích của mình.</div>
-  <div class="quote">&quot;Ngũ Chi Phương&quot; (五枝芳) là một thành ngữ gốc Hán, xuất hiện trong văn chương cổ, nghĩa là năm cành quế thơm — dùng để ca ngợi gia đình có năm người con đều tài giỏi, thi đậu và thành đạt vẻ vang.</div>
+  <div class="sub">Khởi nguồn từ làng Ngọc Chi (Ninh Giang, Hải Dương), dòng họ Vũ di cư về đất Thụy Chính, Thái Thụy, Thái Bình lập nghiệp từ thế kỷ XVII. Cụ Thủy Tổ Vũ Đạo Chính đặt nền móng khai cơ, truyền tới Đời 7 sinh được năm người con trai đều thành đạt giỏi giang — đời sau trân trọng gọi là &#x27;Ngũ Chi Phương&#x27;. Trang này lưu giữ phả hệ của cả năm Chi nối tiếp qua nhiều đời, để con cháu xa gần cùng tìm về gốc tích.</div>
+  <figure class="quote-card">
+    <div class="q-orn" aria-hidden="true"><i></i><span class="q-han" lang="zh-Hant"><span>五</span><span>枝</span><span>芳</span></span><i></i></div>
+    <p class="q-text"><b class="q-term">Ngũ Chi Phương</b> <span class="q-han-inline" lang="zh-Hant">(五枝芳)</span> là một thành ngữ gốc Hán, xuất hiện trong văn chương cổ, nghĩa là năm cành quế thơm — dùng để ca ngợi gia đình có năm người con đều tài giỏi, thi đậu và thành đạt vẻ vang.</p>
+  </figure>
   <div class="legend">
     <span><i class="dot dot-male"></i>Con trai</span>
     <span><i class="dot dot-female"></i>Con gái</span>
@@ -269,7 +305,7 @@
   <ul class="trunk-list">
 <li class="trunk-item">
       <span class="gen-badge">Đời 1</span>
-      <div class="trunk-content"><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đạo Chính</span><span class="years">1600 – 1630</span></div><div class="note">Cụ Thủy Tổ</div><div class="spouse-row">
+      <div class="trunk-content"><div class="card-body c-blue male"><div class="card-top"><span class="avatar">♂</span><span class="name">Vũ Đạo Chính</span></div><div class="note">Cụ Thủy Tổ. Trong gia phả ghi không rõ năm sinh nhưng dự đoán năm sinh khoảng từ 1625 đến 1630 (đời vua Lê Thần Tông; chúa Trịnh là Trịnh Tráng, chúa Nguyễn là Nguyễn Phúc Loan). Không rõ năm mất. Dự đoán trên do người dịch gia phả đối chiếu, phỏng vấn nhiều bô lão trong họ tộc cùng với việc khảo cứu trong tài liệu Niên Biểu Việt Nam</div><div class="spouse-row">
           <span class="knot" title="vợ chồng"><svg viewBox="0 0 24 14" width="16" height="10" fill="none"><circle cx="9" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="7" r="5.5" stroke="currentColor" stroke-width="2"/></svg></span>
           <div class="spouse-card female">
             <div class="card-top"><span class="avatar sp">♀</span><span class="name">Từ Nhân</span><span class="years">s. 1608</span></div>
